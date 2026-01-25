@@ -115,18 +115,8 @@ export const IMAGE_MASTERS: Record<string, ImageMaster> = {
     "width": 1920,
     "height": 1080
   },
-  "site/analytics-abstract": {
-    "src": "/images/site/analytics-abstract.webp",
-    "width": 1024,
-    "height": 1024
-  },
   "site/automotive": {
     "src": "/images/site/automotive.webp",
-    "width": 1024,
-    "height": 768
-  },
-  "site/automotive__jpg": {
-    "src": "/images/site/automotive__jpg.webp",
     "width": 1024,
     "height": 768
   },
@@ -155,11 +145,6 @@ export const IMAGE_MASTERS: Record<string, ImageMaster> = {
     "width": 1024,
     "height": 768
   },
-  "site/energy__jpg": {
-    "src": "/images/site/energy__jpg.webp",
-    "width": 1024,
-    "height": 768
-  },
   "site/go-to-market": {
     "src": "/images/site/go-to-market.webp",
     "width": 1024,
@@ -167,11 +152,6 @@ export const IMAGE_MASTERS: Record<string, ImageMaster> = {
   },
   "site/healthcare": {
     "src": "/images/site/healthcare.webp",
-    "width": 1024,
-    "height": 768
-  },
-  "site/healthcare__jpg": {
-    "src": "/images/site/healthcare__jpg.webp",
     "width": 1024,
     "height": 768
   },
@@ -217,8 +197,8 @@ export const IMAGE_MASTERS: Record<string, ImageMaster> = {
   },
   "site/skyline": {
     "src": "/images/site/skyline.png",
-    "width":  1920,
-    "height":  1080
+    "width": 1920,
+    "height": 1080
   },
   "site/strategy-abstract": {
     "src": "/images/site/strategy-abstract.webp",
@@ -232,11 +212,6 @@ export const IMAGE_MASTERS: Record<string, ImageMaster> = {
   },
   "site/technology": {
     "src": "/images/site/technology.webp",
-    "width": 1024,
-    "height": 768
-  },
-  "site/technology__jpg": {
-    "src": "/images/site/technology__jpg.webp",
     "width": 1024,
     "height": 768
   }
