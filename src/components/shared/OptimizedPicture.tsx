@@ -17,6 +17,12 @@ interface OptimizedPictureProps {
   fill?: boolean;
 }
 
+function hasExplicitPositionClass(className?: string) {
+  if (!className) return false;
+  // Tailwind position utilities that would conflict if we force `relative`.
+  return /(^|\s)(static|fixed|absolute|relative|sticky)(\s|$)/.test(className);
+}
+
 export function OptimizedPicture({
   imageKey,
   alt,
@@ -53,8 +59,13 @@ export function OptimizedPicture({
   const priority = loading === "eager" || fetchPriority === "high";
 
   if (fill) {
+    // next/image `fill` requires the wrapper to establish a box (height/width) and be positioned.
+    // We default to `relative`, but do NOT force it if the caller already set a position class
+    // (e.g. `absolute inset-0`), otherwise Tailwind ordering can override `absolute` and collapse.
+    const basePos = hasExplicitPositionClass(wrapperClassName) ? "" : "relative";
+
     return (
-      <span className={["relative block", wrapperClassName].filter(Boolean).join(" ")}>
+      <span className={[basePos, "block", wrapperClassName].filter(Boolean).join(" ")}>
         <Image
           src={src}
           alt={alt}
