@@ -15,7 +15,7 @@ tags:
   - Enterprise Risk
 id: global-cybersecurity-market-outlook-2030
 slug: global-cybersecurity-market-outlook-2030
-image: /insights/image/Technology/global-cybersecurity-market-outlook-2030.png
+image: /insights/image/Technology/global-cybersecurity-market-outlook-2030.webp
 ---
 
 ## Executive Summary

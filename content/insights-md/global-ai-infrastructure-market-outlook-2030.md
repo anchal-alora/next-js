@@ -15,7 +15,7 @@ tags:
   - Hybrid AI Infrastructure
 id: global-ai-infrastructure-market-outlook-2030
 slug: global-ai-infrastructure-market-outlook-2030
-image: /insights/image/Technology/global-ai-infrastructure-market-outlook-2030.jpg
+image: /insights/image/Technology/global-ai-infrastructure-market-outlook-2030.webp
 ---
 
 ## Market Overview

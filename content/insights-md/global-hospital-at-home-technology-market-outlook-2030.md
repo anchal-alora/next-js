@@ -14,7 +14,7 @@ tags:
   - Home-Based Acute Care
 id: global-hospital-at-home-technology-market-outlook-2030
 slug: global-hospital-at-home-technology-market-outlook-2030
-image: /insights/image/Healthcare/global-hospital-at-home-technology-market-outlook-2030.png
+image: /insights/image/Healthcare/global-hospital-at-home-technology-market-outlook-2030.webp
 ---
 
 ## Executive Summary

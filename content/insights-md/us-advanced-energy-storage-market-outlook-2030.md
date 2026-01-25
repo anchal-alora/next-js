@@ -14,7 +14,7 @@ tags:
   - Lithium Ion Storage
 id: us-advanced-energy-storage-market-outlook-2030
 slug: us-advanced-energy-storage-market-outlook-2030
-image: /insights/image/Energy/us-advanced-energy-storage-market-outlook-2030.png
+image: /insights/image/Energy/us-advanced-energy-storage-market-outlook-2030.webp
 ---
 
 ## Executive Summary

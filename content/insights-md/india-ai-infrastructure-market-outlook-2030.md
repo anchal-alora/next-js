@@ -15,7 +15,7 @@ tags:
   - Interconnection
 id: india-ai-infrastructure-market-outlook-2030
 slug: india-ai-infrastructure-market-outlook-2030
-image: /insights/image/Technology/india-ai-infrastructure-market-outlook-2030.jpg
+image: /insights/image/Technology/india-ai-infrastructure-market-outlook-2030.webp
 
 ---
 

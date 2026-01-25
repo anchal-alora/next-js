@@ -14,7 +14,7 @@ tags:
   - AI Regulation
 id: india-generative-ai-market-outlook-2030
 slug: india-generative-ai-market-outlook-2030
-image: /insights/image/Technology/india-generative-ai-market-outlook-2030.png
+image: /insights/image/Technology/india-generative-ai-market-outlook-2030.webp
 ---
 
 ## Executive Summary
