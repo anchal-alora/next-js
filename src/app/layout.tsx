@@ -16,6 +16,12 @@ export const metadata: Metadata = {
     "Alora Advisory is a premier management consulting firm helping Fortune 500 companies navigate complexity and achieve transformational results through strategy, operations, and digital transformation.",
   alternates: {
     canonical: siteUrl,
+    types: {
+      "application/rss+xml": [
+        { url: "/insights/rss.xml", title: "Alora Advisory Insights" },
+        { url: "/newsroom/rss.xml", title: "Alora Advisory Newsroom" },
+      ],
+    },
   },
   openGraph: {
     type: "website",

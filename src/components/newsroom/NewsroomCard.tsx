@@ -36,7 +36,7 @@ export function NewsroomCard({ article }: NewsroomCardProps) {
             {cardSummary}
           </p>
         )}
-        <div className="flex items-center justify-end mt-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-end mt-auto">
           <Button variant="outline" size="sm">
             Read More
           </Button>

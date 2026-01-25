@@ -10,21 +10,57 @@ function escapeXml(value: string) {
     .replace(/'/g, "&apos;");
 }
 
+function toUtcDate(value: string | undefined | null, fallback: string) {
+  if (!value) return fallback;
+  const ts = Date.parse(value);
+  return Number.isFinite(ts) ? new Date(ts).toUTCString() : fallback;
+}
+
 export async function GET() {
   const articles = await getAllNewsroomArticles();
-  const items = articles.map((article) => {
-    const link = `${SITE_URL}/newsroom/${article.slug}`;
-    const pubDate = article.date ? new Date(article.date).toUTCString() : new Date().toUTCString();
 
-    return `\n    <item>\n      <title>${escapeXml(article.title)}</title>\n      <link>${escapeXml(link)}</link>\n      <guid>${escapeXml(link)}</guid>\n      <pubDate>${escapeXml(pubDate)}</pubDate>\n      <description>${escapeXml(article.summary || article.subheader || "")}</description>\n    </item>`;
+  const sorted = [...articles].sort((a, b) => {
+    const da = a.date ? Date.parse(a.date) : 0;
+    const db = b.date ? Date.parse(b.date) : 0;
+    return (Number.isFinite(db) ? db : 0) - (Number.isFinite(da) ? da : 0);
   });
 
-  const rss = `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0">\n  <channel>\n    <title>Alora Advisory Newsroom</title>\n    <link>${SITE_URL}/newsroom</link>\n    <description>Press releases and announcements from Alora Advisory.</description>\n    ${items.join("\n")}\n  </channel>\n</rss>`;
+  const feedUrl = `${SITE_URL}/newsroom/rss.xml`;
+  const channelUrl = `${SITE_URL}/newsroom`;
+  const buildDate = new Date().toUTCString();
+
+  const items = sorted.slice(0, 50).map((article) => {
+    const link = `${SITE_URL}/newsroom/${article.slug}`;
+    const pubDate = toUtcDate(article.date, buildDate);
+
+    return `
+    <item>
+      <title>${escapeXml(article.title)}</title>
+      <link>${escapeXml(link)}</link>
+      <guid isPermaLink="true">${escapeXml(link)}</guid>
+      <pubDate>${escapeXml(pubDate)}</pubDate>
+      <description>${escapeXml(article.summary || article.subheader || "")}</description>
+    </item>`;
+  });
+
+  const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Alora Advisory Newsroom</title>
+    <link>${escapeXml(channelUrl)}</link>
+    <atom:link href="${escapeXml(feedUrl)}" rel="self" type="application/rss+xml" />
+    <description>Press releases and announcements from Alora Advisory.</description>
+    <language>en</language>
+    <lastBuildDate>${escapeXml(buildDate)}</lastBuildDate>
+    <ttl>60</ttl>
+    ${items.join("\n")}
+  </channel>
+</rss>`;
 
   return new Response(rss, {
     headers: {
       "Content-Type": "application/rss+xml; charset=utf-8",
-      "Cache-Control": "public, max-age=0, s-maxage=3600",
+      "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
     },
   });
 }
