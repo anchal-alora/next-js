@@ -7,13 +7,15 @@ import { CaseStudyDetailLayout } from "@/components/insights/CaseStudyDetailLayo
 import { validateEmail, required } from "@/lib/formValidation";
 import { trackFormSubmit } from "@/lib/gtm";
 import { getTrackingFields } from "@/lib/forms";
+import type { ReportFaq } from "@/lib/faqTypes";
 
 interface ReportDetailPageProps {
   report: Report;
   htmlContent: string | null;
+  faqs?: ReportFaq[];
 }
 
-export function ReportDetailPage({ report, htmlContent }: ReportDetailPageProps) {
+export function ReportDetailPage({ report, htmlContent, faqs }: ReportDetailPageProps) {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -120,6 +122,7 @@ export function ReportDetailPage({ report, htmlContent }: ReportDetailPageProps)
       mdxError={false}
       htmlContent={htmlContent}
       htmlError={!htmlContent}
+      faqs={faqs}
       formData={formData}
       handleChange={handleChange}
       handleSubmit={handleSubmit}

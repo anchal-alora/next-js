@@ -150,8 +150,6 @@ Key drivers include chronic disease prevalence, physician shortages, digital ado
 **What are the main constraints?**  
 Constraints include digital literacy gaps, data privacy concerns, and reimbursement variability.
 
-For additional questions, **[Contact Us](/contact)**.
-
 ---
 
 ## Table of Contents
@@ -203,5 +201,3 @@ For additional questions, **[Contact Us](/contact)**.
 ---
 
 For tailored insights, detailed data tables, or customized analysis, visit **[Contact Us](/contact)**.
-
-:contentReference[oaicite:0]{index=0}

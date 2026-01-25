@@ -26,9 +26,9 @@ For additional context on this transition, see the **[India Telemedicine Market 
 ## Key Findings
 
 - The India telemedicine market is estimated at **US$3.8–4.1 billion in 2024**, reflecting strong expansion over the past five years.  
-- Between 2019 and 2024, the market expanded at an estimated **28-30% compound annual growth rate**, supported by regulatory clarity and sustained behavioral adoption.  
-- The market is projected to reach **US$11.5–13.0 billion by 2030**, growing at a compound annual growth rate of approximately **19-21%** between 2025 and 2030.  
-- Teleconsultation platforms account for approximately **45-50%** of total market revenue, while remote patient monitoring represents the fastest-growing segment.  
+- Between 2019 and 2024, the market expanded at an estimated **28-30 percent compound annual growth rate**, supported by regulatory clarity and sustained behavioral adoption.  
+- The market is projected to reach **US$11.5–13.0 billion by 2030**, growing at a compound annual growth rate of approximately **19-21 percent** between 2025 and 2030.  
+- Teleconsultation platforms account for approximately **45-50 percent** of total market revenue, while remote patient monitoring represents the fastest-growing segment.  
 - Hospitals and integrated health systems remain the largest end users, with employer-sponsored telehealth programs showing relatively higher growth momentum.
 
 For deeper insight into key assumptions and growth drivers, **[Contact Us](/contact)**.
@@ -67,7 +67,7 @@ For segment-level analysis, **[Contact Us](/contact)**.
 
 ## Competitive and Regulatory Environment
 
-The competitive landscape remains moderately fragmented. Platform differentiation is based on clinical quality, provider network scale, technology integration, and ecosystem partnerships. The top five players collectively account for approximately **35-40%** of total market revenue, indicating scope for consolidation as the market matures.
+The competitive landscape remains moderately fragmented. Platform differentiation is based on clinical quality, provider network scale, technology integration, and ecosystem partnerships. The top five players collectively account for approximately **35-40 percent** of total market revenue, indicating scope for consolidation as the market matures.
 
 Regulatory oversight is anchored in national telemedicine practice guidelines and digital health standards. Ongoing integration with national digital health infrastructure is expected to influence interoperability and data governance requirements through 2030.
 
@@ -79,12 +79,8 @@ For regulatory interpretation support, **[Contact Us](/contact)**.
 
 The India telemedicine market outlook to 2030 suggests a transition from transaction-led virtual consultations toward longitudinal digital care models. Platforms that integrate monitoring, diagnostics, and outcome-linked care pathways are expected to demonstrate stronger sustainability as digital healthcare adoption deepens.
 
-Readers seeking tailored analysis or application-specific insights can explore related research via **[Healthcare Technology Insights]**, **[Digital Health Research]**, or **[Contact Us](/contact)**.
+Readers seeking tailored analysis or application-specific insights can explore related research via **[India Telemedicine Market Outlook to 2030](/insights/india-telemedicine-market-outlook-2030)**, or **[Contact Us](/contact)**.
 
 ---
 
-**Contact**  
-Email: sales@aloraadvisory.com  
-Phone: +353 87 457 1343 | +91 704 542 4192  
 
-:contentReference[oaicite:0]{index=0}

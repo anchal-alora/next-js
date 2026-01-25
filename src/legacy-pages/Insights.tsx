@@ -158,7 +158,7 @@ export default function Insights() {
             <InsightsHero report={insightsHeroReport} />
             <div className="mt-8">
               <Button asChild variant="outline" className="group relative overflow-hidden">
-                <Link href="/insights/explore" onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}>
+                <Link href="/insights/explore" >
                   <span className="relative z-10 flex items-center gap-2">
                     Explore All Insights
                     <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -269,7 +269,7 @@ export default function Insights() {
             </div>
             <div className="mt-8">
               <Button asChild variant="outline" className="group relative overflow-hidden">
-                <Link href="/insights/explore" onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}>
+                <Link href="/insights/explore" >
                   <span className="relative z-10 flex items-center gap-2">
                     Explore All Insights
                     <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />

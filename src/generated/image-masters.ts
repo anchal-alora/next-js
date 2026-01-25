@@ -6,212 +6,212 @@ export type ImageMaster = { src: string; width: number; height: number };
 
 export const IMAGE_MASTERS: Record<string, ImageMaster> = {
   "logo/adani": {
-    "src": "/images/logo/adani.webp",
+    "src": "/assets/client-logo/adani.webp",
     "width": 205,
     "height": 140
   },
   "logo/alora-logo": {
-    "src": "/images/logo/alora-logo.webp",
+    "src": "/assets/logo/alora-logo.webp",
     "width": 480,
     "height": 480
   },
   "logo/alora-logo-full": {
-    "src": "/images/logo/alora-logo-full.webp",
+    "src": "/assets/logo/alora-logo-full.webp",
     "width": 480,
     "height": 180
   },
   "logo/anther": {
-    "src": "/images/logo/anther.webp",
+    "src": "/assets/client-logo/anther.webp",
     "width": 480,
     "height": 174
   },
   "logo/bcg": {
-    "src": "/images/logo/bcg.webp",
+    "src": "/assets/client-logo/bcg.webp",
     "width": 480,
     "height": 192
   },
   "logo/bigbasket": {
-    "src": "/images/logo/bigbasket.webp",
+    "src": "/assets/client-logo/bigbasket.webp",
     "width": 480,
     "height": 107
   },
   "logo/bosch": {
-    "src": "/images/logo/bosch.webp",
+    "src": "/assets/client-logo/bosch.webp",
     "width": 480,
     "height": 108
   },
   "logo/dr-trust": {
-    "src": "/images/logo/dr-trust.webp",
+    "src": "/assets/client-logo/dr-trust.webp",
     "width": 480,
     "height": 132
   },
   "logo/gridwave": {
-    "src": "/images/logo/gridwave.webp",
+    "src": "/assets/client-logo/gridwave.webp",
     "width": 480,
     "height": 96
   },
   "logo/hyundai": {
-    "src": "/images/logo/hyundai.webp",
+    "src": "/assets/client-logo/hyundai.webp",
     "width": 480,
     "height": 62
   },
   "logo/itc": {
-    "src": "/images/logo/itc.webp",
+    "src": "/assets/client-logo/itc.webp",
     "width": 480,
     "height": 500
   },
   "logo/lupin": {
-    "src": "/images/logo/lupin.webp",
+    "src": "/assets/client-logo/lupin.webp",
     "width": 480,
     "height": 577
   },
   "logo/mckinsey": {
-    "src": "/images/logo/mckinsey.webp",
+    "src": "/assets/client-logo/mckinsey.webp",
     "width": 480,
     "height": 149
   },
   "logo/mechcore": {
-    "src": "/images/logo/mechcore.webp",
+    "src": "/assets/client-logo/mechcore.webp",
     "width": 240,
     "height": 47
   },
   "logo/nexora": {
-    "src": "/images/logo/nexora.webp",
+    "src": "/assets/client-logo/nexora.webp",
     "width": 480,
     "height": 82
   },
   "logo/oxane": {
-    "src": "/images/logo/oxane.webp",
+    "src": "/assets/client-logo/oxane.webp",
     "width": 480,
     "height": 149
   },
   "logo/pepsico": {
-    "src": "/images/logo/pepsico.webp",
+    "src": "/assets/client-logo/pepsico.webp",
     "width": 480,
     "height": 134
   },
   "logo/pfizer": {
-    "src": "/images/logo/pfizer.webp",
+    "src": "/assets/client-logo/pfizer.webp",
     "width": 480,
     "height": 196
   },
   "logo/schneider-electric": {
-    "src": "/images/logo/schneider-electric.webp",
+    "src": "/assets/client-logo/schneider-electric.webp",
     "width": 480,
     "height": 192
   },
   "logo/tata": {
-    "src": "/images/logo/tata.webp",
+    "src": "/assets/client-logo/tata.webp",
     "width": 480,
     "height": 55
   },
   "logo/tvs-digital": {
-    "src": "/images/logo/tvs-digital.webp",
+    "src": "/assets/client-logo/tvs-digital.webp",
     "width": 480,
     "height": 176
   },
   "site/about-hero": {
-    "src": "/images/site/about-hero.webp",
+    "src": "/assets/site/about-hero.webp",
     "width": 1920,
     "height": 1080
   },
   "site/automotive": {
-    "src": "/images/site/automotive.webp",
+    "src": "/assets/site/automotive.webp",
     "width": 1024,
     "height": 768
   },
   "site/careers-hero": {
-    "src": "/images/site/careers-hero.webp",
+    "src": "/assets/site/careers-hero.webp",
     "width": 1920,
     "height": 1080
   },
   "site/competitive-intelligence": {
-    "src": "/images/site/competitive-intelligence.webp",
+    "src": "/assets/site/competitive-intelligence.webp",
     "width": 1024,
     "height": 1536
   },
   "site/custom-advisory": {
-    "src": "/images/site/custom-advisory.webp",
+    "src": "/assets/site/custom-advisory.webp",
     "width": 1024,
     "height": 1536
   },
   "site/customer-industry-insights": {
-    "src": "/images/site/customer-industry-insights.webp",
+    "src": "/assets/site/customer-industry-insights.webp",
     "width": 480,
     "height": 640
   },
   "site/energy": {
-    "src": "/images/site/energy.webp",
+    "src": "/assets/site/energy.webp",
     "width": 1024,
     "height": 768
   },
   "site/go-to-market": {
-    "src": "/images/site/go-to-market.webp",
+    "src": "/assets/site/go-to-market.webp",
     "width": 1024,
     "height": 1536
   },
   "site/healthcare": {
-    "src": "/images/site/healthcare.webp",
+    "src": "/assets/site/healthcare.webp",
     "width": 1024,
     "height": 768
   },
   "site/hero-consulting": {
-    "src": "/images/site/hero-consulting.webp",
+    "src": "/assets/site/hero-consulting.webp",
     "width": 1920,
     "height": 1080
   },
   "site/industries-energy": {
-    "src": "/images/site/industries-energy.webp",
+    "src": "/assets/site/industries-energy.webp",
     "width": 768,
     "height": 768
   },
   "site/industries-financial": {
-    "src": "/images/site/industries-financial.webp",
+    "src": "/assets/site/industries-financial.webp",
     "width": 768,
     "height": 768
   },
   "site/industries-healthcare": {
-    "src": "/images/site/industries-healthcare.webp",
+    "src": "/assets/site/industries-healthcare.webp",
     "width": 768,
     "height": 768
   },
   "site/industries-technology": {
-    "src": "/images/site/industries-technology.webp",
+    "src": "/assets/site/industries-technology.webp",
     "width": 768,
     "height": 768
   },
   "site/insights-explore": {
-    "src": "/images/site/insights-explore.webp",
+    "src": "/assets/site/insights-explore.webp",
     "width": 1536,
     "height": 1024
   },
   "site/insights-hero": {
-    "src": "/images/site/insights-hero.webp",
+    "src": "/assets/site/insights-hero.webp",
     "width": 1536,
     "height": 1024
   },
   "site/market-research": {
-    "src": "/images/site/market-research.webp",
+    "src": "/assets/site/market-research.webp",
     "width": 1024,
     "height": 1536
   },
   "site/skyline": {
-    "src": "/images/site/skyline.png",
+    "src": "/assets/site/skyline.png",
     "width": 1920,
     "height": 1080
   },
   "site/strategy-abstract": {
-    "src": "/images/site/strategy-abstract.webp",
+    "src": "/assets/site/strategy-abstract.webp",
     "width": 1024,
     "height": 1024
   },
   "site/team-meeting": {
-    "src": "/images/site/team-meeting.webp",
+    "src": "/assets/site/team-meeting.webp",
     "width": 1024,
     "height": 1024
   },
   "site/technology": {
-    "src": "/images/site/technology.webp",
+    "src": "/assets/site/technology.webp",
     "width": 1024,
     "height": 768
   }

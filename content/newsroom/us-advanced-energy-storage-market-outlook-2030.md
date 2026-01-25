@@ -42,7 +42,3 @@ For developers, utilities, and enterprise buyers, the outlook suggests that valu
 The full **[US Advanced Energy Storage Market Outlook to 2030](insights/us-advanced-energy-storage-market-outlook-2030)** is available via the firm’s *Energy Sector insights* sections. Readers can also explore related analysis on the *Energy infrastructure insights page* or **[Contact Us](/contact)** for further discussion.
 
 ---
-
-**Contact:**
-Email: sales@aloraadvisory.com
-Phone: +353 87 457 1343 | +91 704 542 4192

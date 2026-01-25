@@ -257,8 +257,3 @@ For tailored support and detailed market analysis, see our offerings on **[Servi
 
 
 ---
-
-**Report Details:**
-Published: January 2026  
-Email: sales@aloraadvisory.com
-Phone: +353 87 457 1343 | +91 704 542 4192

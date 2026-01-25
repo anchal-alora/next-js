@@ -81,7 +81,7 @@ const careerLevels: CareerLevel[] = [
 export default function CareerJourney() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [svgRect, setSvgRect] = useState({ width: 900, height: 360 });
-  const skylineHref = "/images/site/skyline.png";
+  const skylineHref = "/assets/site/skyline.png";
 
   useEffect(() => {
     const el = svgRef.current;

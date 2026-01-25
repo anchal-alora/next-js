@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Layout from "@/components/layout/Layout";
 import { NewsroomDetailHeader } from "@/components/newsroom/NewsroomDetailHeader";
 import { NewsroomShareButtons } from "@/components/newsroom/NewsroomShareButtons";
 import { LatestReleasesWidget } from "@/components/newsroom/LatestReleasesWidget";
 import { AboutUsBox } from "@/components/newsroom/AboutUsBox";
+import { ContactBlock } from "@/components/shared/ContactBlock";
 import { RelatedResources } from "@/components/newsroom/RelatedResources";
 import { Button } from "@/components/ui/button";
 import type { NewsroomArticle } from "@/lib/newsroomTypes";
@@ -27,12 +27,6 @@ export default function NewsroomDetail({ article, latestArticles, relatedResourc
   const config = getIndustryConfig(article.industry);
   const IndustryIcon = config.icon;
   const formattedDate = formatIstDateLong(article.date);
-
-  const pathname = usePathname();
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [pathname]);
 
 
   const currentUrl = useMemo(() => {
@@ -90,6 +84,8 @@ export default function NewsroomDetail({ article, latestArticles, relatedResourc
                   {cleanHtmlContent && (
                     <div dangerouslySetInnerHTML={{ __html: cleanHtmlContent }} />
                   )}
+
+                  <ContactBlock />
 
                   <AboutUsBox />
                 </article>

@@ -175,8 +175,3 @@ For organizations navigating these decisions, further discussion is available vi
 - Reference framework
 
 ---
-
-**Report Details:**
-Published: January 2026  
-Email: sales@aloraadvisory.com
-Phone: +353 87 457 1343 | +91 704 542 4192

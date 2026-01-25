@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useQueryParams } from "@/hooks/useQueryParams";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Layout from "@/components/layout/Layout";
 import { ExploreFilters } from "@/components/insights/ExploreFilters";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,7 @@ function parsePositiveInt(value: string | null): number | null {
 }
 
 export default function Explore() {
-  const { searchParams, setSearchParams, pathname } = useQueryParams();
+  const { searchParams, setSearchParams } = useQueryParams();
   const allReports = reportsData.reports as Report[];
   const { savedIds } = useSavedInsights();
   const resultsTopRef = useRef<HTMLDivElement | null>(null);
@@ -33,11 +33,6 @@ export default function Explore() {
   function scrollResultsToTop() {
     resultsTopRef.current?.scrollIntoView({ behavior: "auto", block: "start" });
   }
-
-  // Scroll to top only when navigating to Explore (pathname change), not when filters change
-  useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [pathname]);
 
   // Get filter values from URL
   const selectedIndustries = searchParams.getAll("industry");

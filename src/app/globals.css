@@ -666,3 +666,35 @@
     }
   }
 }
+
+
+@layer components {
+  /* FAQ accordion (Insights detail) */
+  details.faq > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details.faq > summary {
+    list-style: none;
+  }
+
+  details.faq[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  details.faq {
+    @apply rounded-2xl border border-border/60 bg-background/60 overflow-hidden;
+  }
+
+  details.faq[open] {
+    @apply bg-background;
+  }
+
+  .faq-header {
+    @apply px-5 py-4 cursor-pointer select-none text-foreground font-medium;
+  }
+
+  .faq-body {
+    @apply px-5 pb-5 text-muted-foreground;
+  }
+}

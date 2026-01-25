@@ -54,6 +54,7 @@ export default async function Page({ params }: { params: Params }) {
 
   const content = await getReportContent(report);
   const htmlContent = content.kind === "html" ? content.html : null;
+  const faqs = content.kind === "html" ? content.faqs ?? [] : [];
   const canonical = toCanonical(`/insights/${report.slug}`);
 
   const schemas = [
@@ -77,7 +78,7 @@ export default async function Page({ params }: { params: Params }) {
   return (
     <>
       <SeoJsonLd schema={schemas} />
-      <ReportDetailPage report={report} htmlContent={htmlContent} />
+      <ReportDetailPage report={report} htmlContent={htmlContent} faqs={faqs} />
     </>
   );
 }

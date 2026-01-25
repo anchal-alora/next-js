@@ -57,6 +57,3 @@ By 2030, Generative AI is expected to be embedded across multiple layers of Indi
 
 ---
 
-**Contact:**  
-Email: sales@aloraadvisory.com  
-Phone: +353 87 457 1343 | +91 704 542 4192

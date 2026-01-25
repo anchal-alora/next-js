@@ -25,8 +25,7 @@ export function NewsroomDetailHeader() {
           Back
         </Button>
         <Link
-          href="/insights/explore" onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}
-          className="text-sm text-muted-foreground hover:text-primary transition-colors"
+          href="/insights/explore" className="text-sm text-muted-foreground hover:text-primary transition-colors"
         >
           Explore Insights
         </Link>

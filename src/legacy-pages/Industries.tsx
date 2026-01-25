@@ -10,16 +10,12 @@ import { ScrollReveal, ScrollRevealStagger } from "@/components/ScrollReveal";
 import { ProcessFlow } from "@/components/infographics";
 import { ArrowRight, ArrowUpRight, Heart, Cpu, Zap, Car, Target, Search, BarChart3, Presentation } from "lucide-react";
 import { getContactFormLink } from "@/lib/routes";
-import TechnologyImg from "@/assets/Technology.jpg";
-import EnergyImg from "@/assets/Energy.jpg";
-import HealthcareImg from "@/assets/Healthcare.jpg";
-import AutomotiveImg from "@/assets/Automotive.jpg";
 
 const industries = [
   {
     id: "technology",
     icon: Cpu,
-    image: TechnologyImg,
+    image: "/assets/site/technology.webp",
     industryKey: "Technology",
     title: "Technology and AI",
     subtitle: "Digital Products, Software Platforms, Hardware, Communications",
@@ -43,7 +39,7 @@ const industries = [
   {
     id: "healthcare",
     icon: Heart,
-    image: HealthcareImg,
+    image: "/assets/site/healthcare.webp",
     industryKey: "Healthcare",
     title: "Healthcare and Life Sciences",
     subtitle: "Providers, Payers, Pharmaceuticals",
@@ -67,7 +63,7 @@ const industries = [
   {
     id: "automotive",
     icon: Car,
-    image: AutomotiveImg,
+    image: "/assets/site/automotive.webp",
     industryKey: "Automotive",
     title: "Automotive and Mobility",
     subtitle: "OEMs, Suppliers, EV Ecosystem, Mobility Services",
@@ -91,7 +87,7 @@ const industries = [
   {
     id: "energy",
     icon: Zap,
-    image: EnergyImg,
+    image: "/assets/site/energy.webp",
     industryKey: "Energy",
     title: "Energy and Sustainability",
     subtitle: "Oil and Gas, Utilities, Renewables",
@@ -173,7 +169,7 @@ export default function Industries() {
                   <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-shimmer"></span>
                 </Button>
               </Link>
-              <Link href="/insights/explore" onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}>
+              <Link href="/insights/explore" >
                 <Button variant="outline" size="lg" className="group relative overflow-hidden">
                   <span className="relative z-10">Explore Industry Insights</span>
                   <ArrowUpRight className="ml-2 relative z-10" />

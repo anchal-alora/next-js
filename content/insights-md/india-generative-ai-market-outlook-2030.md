@@ -196,8 +196,3 @@ Strong IT services exports, multilingual requirements, and large-scale digital p
 This overview is based on a structured secondary research and analytical framework examining market evolution, adoption dynamics, competitive structure, and policy context for Generative AI in India.
 
 ---
-
-**Report Details**  
-Published: January 2026  
-Email: sales@aloraadvisory.com  
-Phone: +353 87 457 1343 | +91 704 542 4192

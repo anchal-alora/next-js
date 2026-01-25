@@ -230,8 +230,3 @@ This overview is based on a comprehensive strategic intelligence analysis synthe
 - Assumptions and reference framework
 
 ---
-
-**Report Details:**  
-Published: January 2026  
-Email: sales@aloraadvisory.com  
-Phone: +353 87 457 1343 | +91 704 542 4192

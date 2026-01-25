@@ -18,8 +18,11 @@ import { MarkdownContent } from "./MarkdownContent";
 import { contentComponents } from "./ContentComponents";
 import { renderInlineMarkdown } from "@/lib/inlineMarkdown";
 import { AboutUsBox } from "./AboutUsBox";
+import { ContactBlock } from "@/components/shared/ContactBlock";
 import { formatIstDateLong } from "@/lib/istDate";
 import Layout from "@/components/layout/Layout";
+import type { ReportFaq } from "@/lib/faqTypes";
+import { FaqSection } from "@/components/insights/FaqSection";
 
 // MDX component type that accepts a components prop
 type MdxComponentType = React.ComponentType<{ components?: Record<string, React.ComponentType> }>;
@@ -35,6 +38,7 @@ interface ReportDetailLayoutProps {
   mdxError: boolean;
   htmlContent: string | null;
   htmlError: boolean;
+  faqs?: ReportFaq[];
   formData: {
     fullName: string;
     email: string;
@@ -55,6 +59,7 @@ export function ReportDetailLayout({
   mdxError,
   htmlContent,
   htmlError,
+  faqs,
   formData,
   handleChange,
   handleSubmit,
@@ -142,6 +147,8 @@ export function ReportDetailLayout({
                       components: contentComponents,
                     })}
                   </MdxContentWrapper>
+                  <ContactBlock />
+                  <FaqSection faqs={faqs} />
                   <AboutUsBox />
                 </article>
               ) : hasHtml ? (
@@ -149,6 +156,8 @@ export function ReportDetailLayout({
                   <MdxContentWrapper>
                     <MarkdownContent html={htmlContent as string} />
                   </MdxContentWrapper>
+                  <ContactBlock />
+                  <FaqSection faqs={faqs} />
                   <AboutUsBox />
                 </article>
               ) : mdxError || htmlError ? (

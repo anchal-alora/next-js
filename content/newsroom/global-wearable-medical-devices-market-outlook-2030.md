@@ -78,6 +78,3 @@ Decision-makers seeking deeper insights into the **global wearable medical devic
 
 ---
 
-**Contact**  
-Email: sales@aloraadvisory.com  
-Phone: +353 87 457 1343 | +91 704 542 4192

@@ -46,7 +46,3 @@ For enterprise buyers, cloud providers, investors, and policymakers, the outlook
 The full **[India AI Infrastructure Market Outlook to 2030](/insights/india-ai-infrastructure-market-outlook-2030)** is available through the firm’s *Technology Infrastructure insights* section. Readers can also explore related analysis on the **[Industries](/industries)** page or **[Contact Us](/contact)** to discuss how these findings apply to specific deployment, investment, or policy considerations.
 
 ---
-
-**Contact:**  
-Email: sales@aloraadvisory.com  
-Phone: +353 87 457 1343 | +91 704 542 4192

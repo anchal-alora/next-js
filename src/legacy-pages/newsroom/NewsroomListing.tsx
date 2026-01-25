@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Layout from "@/components/layout/Layout";
 import { NewsroomFilters } from "@/components/newsroom/NewsroomFilters";
 import { NewsroomCard } from "@/components/newsroom/NewsroomCard";
@@ -24,16 +24,12 @@ interface NewsroomListingProps {
 }
 
 export default function NewsroomListing({ articles }: NewsroomListingProps) {
-  const { searchParams, setSearchParams, pathname } = useQueryParams();
+  const { searchParams, setSearchParams } = useQueryParams();
   const resultsTopRef = useRef<HTMLDivElement | null>(null);
 
   function scrollResultsToTop() {
     resultsTopRef.current?.scrollIntoView({ behavior: "auto", block: "start" });
   }
-
-  useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [pathname]);
 
   const selectedIndustries = searchParams.getAll("industry");
 

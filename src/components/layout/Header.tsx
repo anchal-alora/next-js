@@ -19,11 +19,6 @@ const navLinks = [
   { name: "Contact", path: "/contact" },
 ];
 
-function scrollToTopNoHash(href: string) {
-  if (href.includes("#")) return;
-  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-}
-
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,20 +26,33 @@ export default function Header() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Check for hash on initial load and set header to non-transparent
-    if (window.location.hash) {
-      setIsScrolled(true);
-    }
-
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    const updateScrolledState = () => {
+      // Keep header readable when restoring scroll position (e.g., back/forward navigation)
+      // and when using in-page anchors.
+      setIsScrolled(window.scrollY > 20 || !!window.location.hash);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    const handlePopState = () => {
+      // Scroll restoration can happen after popstate; defer measurement.
+      requestAnimationFrame(updateScrolledState);
+    };
+
+    updateScrolledState();
+    window.addEventListener("scroll", updateScrolledState, { passive: true });
+    window.addEventListener("hashchange", updateScrolledState);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("scroll", updateScrolledState);
+      window.removeEventListener("hashchange", updateScrolledState);
+      window.removeEventListener("popstate", handlePopState);
+    };
   }, []);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    // Ensure header state matches current scroll position after route transitions.
+    requestAnimationFrame(() => setIsScrolled(window.scrollY > 20 || !!window.location.hash));
   }, [pathname]);
 
   return (
@@ -61,7 +69,7 @@ export default function Header() {
           <Link 
             href="/" 
             className="flex items-center gap-3 group"
-            onClick={() => { scrollToTopNoHash('/'); trackClick('Logo', 'link', { click_url: '/' }); }}
+            onClick={() => { trackClick('Logo', 'link', { click_url: '/' }); }}
           >
             <OptimizedPicture
               imageKey="logo/alora-logo-full"
@@ -78,7 +86,7 @@ export default function Header() {
               <Link 
                 key={link.path} 
                 href={link.path}
-                onClick={() => { scrollToTopNoHash(link.path); trackClick(`${link.name} Navigation`, 'link', { click_url: link.path }); }}
+                onClick={() => { trackClick(`${link.name} Navigation`, 'link', { click_url: link.path }); }}
               >
                 <Button
                   variant="ghost-nav"
@@ -98,7 +106,7 @@ export default function Header() {
           <div className="hidden lg:block">
             <Link 
               href={getContactFormLink("header-button")}
-              onClick={() => { scrollToTopNoHash(getContactFormLink("header-button")); trackClick('Get in Touch Button (Header)', 'button', { click_url: getContactFormLink("header-button") }); }}
+              onClick={() => { trackClick('Get in Touch Button (Header)', 'button', { click_url: getContactFormLink("header-button") }); }}
             >
               <Button variant="default" size="sm" className="gap-1.5">
                 <span className="relative z-10 text-white">Connect</span>
@@ -129,7 +137,7 @@ export default function Header() {
               <Link 
                 key={link.path} 
                 href={link.path}
-                onClick={() => { scrollToTopNoHash(link.path); trackClick(`${link.name} Navigation (Mobile)`, 'link', { click_url: link.path }); }}
+                onClick={() => { trackClick(`${link.name} Navigation (Mobile)`, 'link', { click_url: link.path }); }}
               >
                 <Button
                   variant="ghost"
@@ -146,7 +154,7 @@ export default function Header() {
             <Link 
               href={getContactFormLink("header-button-mobile")} 
               className="mt-4"
-              onClick={() => { scrollToTopNoHash(getContactFormLink("header-button-mobile")); trackClick('Get in Touch Button (Mobile)', 'button', { click_url: getContactFormLink("header-button-mobile") }); }}
+              onClick={() => { trackClick('Get in Touch Button (Mobile)', 'button', { click_url: getContactFormLink("header-button-mobile") }); }}
             >
               <Button variant="default" className="w-full group relative overflow-hidden" size="lg">
                 <span className="relative z-10 text-white">Connect</span>

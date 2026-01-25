@@ -6,7 +6,7 @@ export function organizationSchema() {
     "@type": "Organization",
     name: "Alora Advisory",
     url: SITE_URL,
-    logo: `${SITE_URL}/images/logo/alora-logo.webp`,
+    logo: `${SITE_URL}/assets/logo/alora-logo.webp`,
     sameAs: ["https://www.linkedin.com/company/alora-advisory"],
   };
 }
