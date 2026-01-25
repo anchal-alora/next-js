@@ -1,0 +1,302 @@
+{
+  "_meta": {
+    "description": "This file controls all Insights page content, section assignment, sorting behavior, routing, and CTA logic. Each report is rendered exactly once per page load using sequential section assignment. Generated from CSV files in content/csv/ and merged with existing reports.",
+    "source": "CSV files in content/csv/ (recursive glob pattern: **/*.csv). Reports can also be manually added to this JSON file.",
+    "notes": [
+      "All reports appear in exactly one section per render (Insights Hero → Featured → Case Studies → Research → Recent Articles).",
+      "Recent Articles is a derived sink containing all unassigned reports, sorted normally.",
+      "Case Studies are identified solely by placement === 'Case Studies' and use a dedicated layout and CTA everywhere.",
+      "If report type is 'Case Study', placement must be 'Case Studies'. Verify consistency between type and placement fields.",
+      "CSV files are the source of truth. When regenerating, CSV data overwrites existing reports with matching IDs.",
+      "Reports can be manually added to this JSON, but will be overwritten if a CSV row with the same ID is processed."
+    ],
+    "requiredFields": [
+      "id",
+      "slug",
+      "type",
+      "date",
+      "title",
+      "description",
+      "contentFormat",
+      "industry",
+      "image",
+      "placement"
+    ],
+    "optionalFields": [
+      "priority",
+      "pinned",
+      "link",
+      "mdxSlug",
+      "taggings",
+      "mdSlug"
+    ],
+    "fields": {
+      "id": "REQUIRED. Unique stable identifier for the report. Used for deterministic sorting and tie-breaking. Must be unique across all reports.",
+      "slug": "REQUIRED. Unique URL slug used for routing. Generates the route /insights/:slug. Must be unique across all reports.",
+      "type": "REQUIRED. Human-readable classification such as 'Research Report', 'Case Study', or 'Article'. Display-only.",
+      "date": "REQUIRED. Canonical publish date stored as ISO 'YYYY-MM-DD' (Asia/Kolkata date-only). Used for sorting and display.",
+      "title": "REQUIRED. Primary headline displayed on cards and detail page hero section.",
+      "description": "REQUIRED. Short summary shown on cards and in the detail page hero section.",
+      "contentFormat": "REQUIRED. Controls CTA behavior for non-case-study reports: 'downloadable' or 'non-downloadable'. Ignored for Case Studies.",
+      "industry": "REQUIRED. Industry label used for display and for dynamic file path construction. No hardcoded industry list.",
+      "image": "REQUIRED. Card image URL. Must start with /insights/image/. Auto-resolves file extensions (.png, .jpg, .jpeg, .svg, .webp, .gif).",
+      "placement": "REQUIRED. Primary section eligibility. One of: 'Insights Hero', 'Featured Insights', 'Case Studies', 'In-Depth Research Reports', 'Recent Articles'.",
+      "priority": "OPTIONAL. Number (default 0). Higher values rank higher within the same section and Recent Articles.",
+      "pinned": "OPTIONAL. Boolean (default false). Pinned reports rank above all others within their section and Recent Articles.",
+      "link": "/Automotive/aa.pdf",
+      "mdxSlug": "OPTIONAL. Maps to MDX content at src/web-articles/<Industry>/<filename>.mdx. Used for article and case study detail pages. Format: 'Industry/filename' (without .mdx extension).",
+      "mdSlug": "OPTIONAL. Alternative to mdxSlug for markdown files in content/insights-md/. Used for markdown-based insights.",
+      "taggings": "OPTIONAL. List of topic tags shown under the hero description on detail pages. Can be array or comma-separated string."
+    },
+    "validationRules": {
+      "idUniqueness": "Each report must have a unique id. Duplicate IDs within CSV files will cause generation to fail.",
+      "slugUniqueness": "Each report must have a unique slug. Slug collisions will cause generation to fail.",
+      "dateFormat": "Date must match format: 'YYYY-MM-DD' (Asia/Kolkata date-only). Regex: /^\\d{4}-\\d{2}-\\d{2}$/",
+      "imagePath": "Image path must start with /insights/image/. File extension is auto-resolved if not specified.",
+      "linkPath": "If link is provided, it must point to /public/insights/reports/<Industry>/ and file must exist on disk.",
+      "contentFormatValues": "contentFormat must be either 'downloadable' or 'non-downloadable'.",
+      "placementValues": "placement must be one of: 'Insights Hero', 'Featured Insights', 'Case Studies', 'In-Depth Research Reports', 'Recent Articles'.",
+      "caseStudyConsistency": "If type is 'Case Study', placement must be 'Case Studies'."
+    },
+    "generationRules": {
+      "sourceOfTruth": "CSV files in content/csv/ are the source of truth for report data",
+      "mergeBehavior": "Reports from CSV overwrite existing reports with the same ID. Reports not in CSV are preserved.",
+      "mdxGeneration": "MDX files are auto-generated to src/web-articles/ when section_* columns are present in CSV or mdxSlug is specified",
+      "imageResolution": "Image paths are auto-resolved to find files with common extensions (.png, .jpg, .jpeg, .svg, .webp, .gif) if extension is missing"
+    },
+    "caseStudyRules": {
+      "identification": "placement === 'Case Studies'",
+      "cardCTA": "Always 'Read Full Case Study' (including when shown in Recent Articles).",
+      "detailLayout": "Uses CaseStudyDetailLayout with MDX content.",
+      "ctaBehavior": "Shows a single CTA such as 'Talk to Us' linking to /contact.",
+      "contentFormatHandling": "contentFormat is ignored entirely for Case Studies."
+    },
+    "sortingRules": {
+      "order": [
+        "pinned (true first)",
+        "priority (higher first)",
+        "date (newest first)",
+        "stable hash of id (deterministic tie-break)"
+      ],
+      "appliesTo": [
+        "Insights Hero",
+        "Featured Insights",
+        "Case Studies",
+        "In-Depth Research Reports",
+        "Recent Articles"
+      ],
+      "randomness": "No Math.random() is used. Sorting is stable across reloads."
+    },
+    "routingRules": {
+      "route": "/insights/:slug",
+      "page": "src/pages/insights/ReportDetail.tsx",
+      "layouts": [
+        "ReportDetailLayout (default)",
+        "CaseStudyDetailLayout (when placement === 'Case Studies')"
+      ]
+    }
+  },
+  "reports": [
+    {
+      "id": "us-advanced-energy-storage-market-outlook-2030",
+      "slug": "us-advanced-energy-storage-market-outlook-2030",
+      "type": "Market Overview",
+      "date": "2026-01-10",
+      "title": "US Advanced Energy Storage Market Outlook to 2030",
+      "description": "The US advanced energy storage market is undergoing a structural transition from a “nice-to-have” source of grid flexibility to mission-critical national infrastructure. This shift is being driven by federal policy reform, accelerating electricity demand from AI-led data center expansion and re-shored manufacturing, and a rapid reconfiguration of global supply chains.",
+      "contentFormat": "non-downloadable",
+      "industry": "Energy",
+      "image": "/insights/image/Energy/us-advanced-energy-storage-market-outlook-2030.png",
+      "placement": "Featured Insights",
+      "priority": 0,
+      "pinned": false,
+      "mdSlug": "us-advanced-energy-storage-market-outlook-2030",
+      "taggings": [
+        "Battery Energy Storage Systems (BESS)",
+        "Grid Scale Storage",
+        "FEOC Compliance",
+        "Grid Modernization",
+        "Lithium Ion Storage"
+      ]
+    },
+    {
+      "id": "global-ai-infrastructure-market-outlook-2030",
+      "slug": "global-ai-infrastructure-market-outlook-2030",
+      "type": "Market Overview",
+      "date": "2026-01-05",
+      "title": "Global AI Infrastructure Market Outlook 2025–2030",
+      "description": "Discover 3 key risks in AI Infrastructure 2026. Includes market sizing data and vendor comparisons. Read the full outlook.",
+      "contentFormat": "non-downloadable",
+      "industry": "Technology",
+      "image": "/insights/image/Technology/global-ai-infrastructure-market-outlook-2030.jpg",
+      "placement": "Featured Insights",
+      "priority": 0,
+      "pinned": false,
+      "mdSlug": "global-ai-infrastructure-market-outlook-2030",
+      "taggings": [
+        "AI Infrastructure",
+        "AI Data Centers",
+        "AI Compute",
+        "AI Inference",
+        "Sovereign AI",
+        "Hybrid AI Infrastructure"
+      ]
+    },
+    {
+      "id": "india-ai-infrastructure-market-outlook-2030",
+      "slug": "india-ai-infrastructure-market-outlook-2030",
+      "type": "Article",
+      "date": "2026-01-07",
+      "title": "India AI Infrastructure Market Outlook to 2030",
+      "description": "India’s AI infrastructure market through 2030 will be shaped less by demand creation and more by the speed and certainty of capacity deployment across power, data centers, and cloud infrastructure.",
+      "contentFormat": "non-downloadable",
+      "industry": "Technology",
+      "image": "/insights/image/Technology/india-ai-infrastructure-market-outlook-2030.jpg",
+      "placement": "Featured Insights",
+      "priority": 0,
+      "pinned": false,
+      "mdSlug": "india-ai-infrastructure-market-outlook-2030",
+      "taggings": [
+        "India AI Infrastructure",
+        "AI Data Centers",
+        "Cloud Infrastructure",
+        "High Performance Compute",
+        "Power and Cooling",
+        "Interconnection"
+      ]
+    },
+    {
+      "id": "india-generative-ai-market-outlook-2030",
+      "slug": "india-generative-ai-market-outlook-2030",
+      "type": "Market Overview",
+      "date": "2026-01-01",
+      "title": "India Generative AI Market Outlook to 2030",
+      "description": "An analytical overview of the India Generative AI market covering market context, size, growth outlook, segmentation, competitive dynamics, regulatory considerations, and strategic implications through 2030.",
+      "contentFormat": "non-downloadable",
+      "industry": "Technology",
+      "image": "/insights/image/Technology/india-generative-ai-market-outlook-2030.png",
+      "placement": "Insights Hero",
+      "priority": 0,
+      "pinned": false,
+      "mdSlug": "india-generative-ai-market-outlook-2030",
+      "taggings": [
+        "Generative AI",
+        "Artificial Intelligence India",
+        "Enterprise AI",
+        "AI Services",
+        "AI Regulation"
+      ]
+    },
+    {
+      "id": "global-cybersecurity-market-outlook-2030",
+      "slug": "global-cybersecurity-market-outlook-2030",
+      "type": "Market Overview",
+      "date": "2026-01-10",
+      "title": "Global Cybersecurity Market Outlook to 2030",
+      "description": "Neutral, analyst-led overview of the global cybersecurity market covering market size, growth outlook, segmentation, competitive landscape, regulatory environment, and strategic implications through 2030.",
+      "contentFormat": "non-downloadable",
+      "industry": "Technology",
+      "image": "/insights/image/Technology/global-cybersecurity-market-outlook-2030.png",
+      "placement": "Insights Hero",
+      "priority": 0,
+      "pinned": false,
+      "mdSlug": "global-cybersecurity-market-outlook-2030",
+      "taggings": [
+        "Cybersecurity",
+        "Information Security",
+        "Cloud Security",
+        "Identity and Access Management",
+        "Managed Security Services",
+        "Enterprise Risk"
+      ]
+    },
+    {
+      "id": "global-hospital-at-home-technology-market-outlook-2030",
+      "slug": "global-hospital-at-home-technology-market-outlook-2030",
+      "type": "Market Overview",
+      "date": "2026-01-12",
+      "title": "Global Hospital-at-Home Technology Market Outlook to 2030",
+      "description": "The global Hospital-at-Home technology market is transitioning from pilot-based care delivery to a structured component of healthcare systems, driven by digital health adoption, capacity constraints, and evolving reimbursement frameworks.",
+      "contentFormat": "non-downloadable",
+      "industry": "Healthcare",
+      "image": "/insights/image/Healthcare/global-hospital-at-home-technology-market-outlook-2030.png",
+      "placement": "Recent Articles",
+      "priority": 0,
+      "pinned": false,
+      "mdSlug": "global-hospital-at-home-technology-market-outlook-2030",
+      "taggings": [
+        "Hospital-at-Home",
+        "Remote Patient Monitoring",
+        "Virtual Care Platforms",
+        "Digital Health Infrastructure",
+        "Home-Based Acute Care"
+      ]
+    },
+    {
+      "id": "global-wearable-medical-devices-market-outlook-2030",
+      "slug": "global-wearable-medical-devices-market-outlook-2030",
+      "type": "Market Overview",
+      "date": "2026-01-16",
+      "title": "Global Wearable Medical Devices for Chronic Disease Management Market Outlook to 2030",
+      "description": "The global wearable medical devices for chronic disease management market has evolved from a supplementary monitoring segment into an integral component of long-term care delivery, driven by rising chronic disease prevalence, advances in medical-grade sensor technologies, and decentralised care models.",
+      "contentFormat": "non-downloadable",
+      "industry": "Healthcare",
+      "image": "/insights/image/Healthcare/global-wearable-medical-devices-market-outlook-2030.webp",
+      "placement": "Featured Insights",
+      "priority": 0,
+      "pinned": false,
+      "mdSlug": "global-wearable-medical-devices-market-outlook-2030",
+      "taggings": [
+        "Wearable Medical Devices",
+        "Chronic Disease Management",
+        "Remote Patient Monitoring",
+        "Digital Health",
+        "Medical Device Market"
+      ]
+    },
+    {
+      "id": "india-telemedicine-market-outlook-2030",
+      "slug": "india-telemedicine-market-outlook-2030",
+      "type": "Market Overview",
+      "date": "2026-01-16",
+      "title": "India Telemedicine Market Outlook to 2030",
+      "description": "The India telemedicine market has evolved from a limited digital health adjunct into a structurally relevant component of healthcare delivery, supported by access gaps, physician shortages, chronic disease burden, and regulatory normalization.",
+      "contentFormat": "non-downloadable",
+      "industry": "Healthcare",
+      "image": "/insights/image/Healthcare/india-telemedicine-market-outlook-2030.webp",
+      "placement": "Recent Articles",
+      "priority": 0,
+      "pinned": false,
+      "mdSlug": "india-telemedicine-market-outlook-2030",
+      "taggings": [
+        "Telemedicine",
+        "Digital Health India",
+        "Virtual Care",
+        "Remote Patient Monitoring",
+        "Healthcare Technology"
+      ]
+    },
+    {
+      "id": "india-home-healthcare-devices-market",
+      "slug": "india-home-healthcare-devices-market",
+      "type": "Case Study",
+      "date": "2026-01-16",
+      "title": "Brand Perception Study in India’s Home Healthcare Devices Market",
+      "description": "National brand perception study of 10,000 respondents assessing trust, quality, and competitive standing in India’s home healthcare devices market to support evidence-led positioning and leadership alignment.",
+      "contentFormat": "non-downloadable",
+      "industry": "Healthcare",
+      "image": "/insights/image/Healthcare/india-home-healthcare-devices-market.webp",
+      "placement": "Case Studies",
+      "priority": 0,
+      "pinned": false,
+      "mdxSlug": "Healthcare/india-home-healthcare-devices-market",
+      "taggings": [
+        "Brand Perception",
+        "Home Healthcare Devices",
+        "India",
+        "Consumer Healthcare",
+        "Trust and Credibility"
+      ]
+    }
+  ]
+}

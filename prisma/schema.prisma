@@ -1,0 +1,154 @@
+// Prisma schema for Alora Advisory Next.js rebuild
+// NOTE: This schema intentionally avoids storing raw request payloads.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model ContactForm {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  formType    String   @default("contact")
+
+  fullName    String
+  email       String
+  phone       String?
+  company     String?
+  inquiryType String?
+  subject     String?
+  message     String?  // max 750 enforced in application layer
+
+  source      String?
+  pagePath    String
+  pageUrl     String
+  referrer    String?
+
+  meta        Json?    @db.JsonB
+
+  @@index([email])
+  @@map("ContactForms")
+}
+
+model CareersForm {
+  id             String   @id @default(cuid())
+  createdAt       DateTime @default(now()) @db.Timestamptz(3)
+  formType        String   @default("careers")
+
+  fullName        String
+  email           String
+  phone           String?  // required in UI; optional in DB
+  areaOfInterest  String
+  background      String   // min/max enforced in application layer
+
+  source          String?
+  pagePath        String
+  pageUrl         String
+  referrer        String?
+
+  meta            Json?    @db.JsonB
+
+  @@index([email])
+  @@map("CareersForms")
+}
+
+model NewsletterForm {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  formType  String   @default("newsletter")
+
+  email     String   @unique
+
+  source    String?
+  pagePath  String
+  pageUrl   String
+  referrer  String?
+
+  meta      Json?    @db.JsonB
+
+  @@map("NewsletterForms")
+}
+
+model Lead {
+  id             String         @id @default(cuid())
+  createdAt      DateTime       @default(now()) @db.Timestamptz(3)
+
+  fullName       String
+  email          String
+  phone          String?
+
+  reportSlug     String
+  reportTitle    String?
+  reportIndustry String?
+  formType       String
+
+  source         String?
+  pagePath       String
+  pageUrl        String
+  referrer       String?
+
+  crmSyncStatus  String         @default("pending")
+  crmSyncedAt    DateTime?      @db.Timestamptz(3)
+  crmError       String?
+
+  meta           Json?          @db.JsonB
+
+  downloadTokens DownloadToken[]
+
+  @@index([email])
+  @@index([reportSlug])
+  @@map("Leads")
+}
+
+model DownloadToken {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  tokenHash String   @unique
+  objectKey String
+  expiresAt DateTime @db.Timestamptz(3)
+  usedAt    DateTime? @db.Timestamptz(3)
+
+  leadId    String?
+  lead      Lead?    @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  reportSlug String?
+  meta       Json?   @db.JsonB
+
+  @@index([expiresAt])
+  @@index([reportSlug])
+  @@map("DownloadToken")
+}
+
+model SubmissionIndex {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+
+  formType   String
+  email      String
+  name       String?
+  phone      String?
+  reportSlug String?
+
+  source     String?
+  pagePath   String
+  pageUrl    String
+  referrer   String?
+
+  status     String?
+  meta       Json?    @db.JsonB
+
+  sourceTable String
+  sourceId    String
+
+  @@index([email])
+  @@index([formType])
+  @@index([source])
+  @@unique([sourceTable, sourceId])
+  @@map("SubmissionIndex")
+}

@@ -1,0 +1,9 @@
+/* TEAM */
+Organization: Alora Advisory
+Contact: info@aloraadvisory.com
+Website: https://aloraadvisory.com
+
+/* THANKS */
+Libraries: React, Vite, TypeScript, Tailwind CSS, shadcn/ui
+Frameworks: React Router, React Helmet Async
+

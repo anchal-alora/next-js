@@ -1,0 +1,21 @@
+{
+  "name": "Alora Advisory",
+  "short_name": "Alora",
+  "description": "Market Intelligence for Confident Decisions",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7F33CC",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
