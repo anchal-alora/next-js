@@ -2,8 +2,8 @@
   "_meta": {
     "description": "Newsroom index generated from markdown files in content/newsroom/. This file controls all newsroom content, routing, and display behavior. Each newsroom article is authored as a markdown file with frontmatter and automatically indexed here.",
     "source": "Markdown files in content/newsroom/ (recursive glob pattern: **/*.{md,txt})",
-    "generated": "2026-01-16T13:15:54.207Z",
-    "count": 9,
+    "timezone": "Asia/Kolkata (GMT+05:30)",
+    "dateFormat": "YYYY-MM-DD",
     "fields": {
       "slug": "Unique URL slug used for routing. Auto-generated from filename if not provided in frontmatter. Generates the route /newsroom/:slug.",
       "date": "Release date stored as YYYY-MM-DD in Asia/Kolkata (GMT+05:30). Used for sorting (newest first).",
@@ -50,25 +50,25 @@
       "Slug collisions are handled by allowing markdown files to overwrite existing releases with the same slug.",
       "Summary auto-extraction removes markdown formatting (headers, bold, italic, links) and limits length to 200 characters."
     ],
-    "timezone": "Asia/Kolkata (GMT+05:30)",
-    "dateFormat": "YYYY-MM-DD"
+    "generated": "2026-01-27T12:58:23.871Z",
+    "count": 9
   },
   "releases": [
     {
-      "slug": "india-telemedicine-market-outlook-2030",
+      "slug": "global-wearable-medical-devices-market-outlook-2030",
       "date": "2026-01-16",
-      "title": "India Telemedicine Market Outlook to 2030 Highlights Structural Shift in Digital Healthcare Delivery",
+      "title": "Global Wearable Medical Devices Market Outlook to 2030 Highlights Shift Toward Continuous Chronic Care",
       "industry": "Healthcare",
-      "subheader": "New market outlook finds telemedicine in India moving from episodic virtual consultations toward integrated, longitudinal digital care models amid structural healthcare access gaps.",
+      "subheader": "New market outlook finds wearable medical devices increasingly embedded in long-term chronic disease management, driven by decentralised care delivery and continuous monitoring adoption.",
       "tags": [
-        "India Telemedicine Market",
-        "Digital Healthcare India",
-        "Virtual Care",
+        "Wearable Medical Devices",
+        "Chronic Disease Management",
         "Remote Patient Monitoring",
-        "Teleconsultation Platforms"
+        "Digital Health",
+        "Medical Device Market"
       ],
-      "summary": "The India telemedicine market outlook to 2030 highlights a structural transition in healthcare delivery as virtual care platforms become embedded across hospitals, clinics, employers, and homecare settings. Rising chronic disease prevalence, physician shortages, digital infrastructure expansion, and regulatory normalization continue to shape long-term market growth.",
-      "sourcePath": "content/newsroom/india-telemedicine-market-outlook-2030.md"
+      "summary": "The global wearable medical devices market for chronic disease management is entering a structurally important phase as healthcare systems increasingly rely on continuous monitoring, decentralised care delivery, and data-driven disease management. The market was valued at US$42.0–45.0 billion in 2024 and is projected to reach US$90.0–95.0 billion by 2030, supported by sustained adoption across diabetes, cardiovascular, respiratory, and neurological care.",
+      "sourcePath": "content/newsroom/global-wearable-medical-devices-market-outlook-2030.md"
     },
     {
       "slug": "india-home-healthcare-devices-market",
@@ -88,20 +88,20 @@
       "sourcePath": "content/newsroom/india-home-healthcare-devices-market.md"
     },
     {
-      "slug": "global-wearable-medical-devices-market-outlook-2030",
+      "slug": "india-telemedicine-market-outlook-2030",
       "date": "2026-01-16",
-      "title": "Global Wearable Medical Devices Market Outlook to 2030 Highlights Shift Toward Continuous Chronic Care",
+      "title": "India Telemedicine Market Outlook to 2030 Highlights Structural Shift in Digital Healthcare Delivery",
       "industry": "Healthcare",
-      "subheader": "New market outlook finds wearable medical devices increasingly embedded in long-term chronic disease management, driven by decentralised care delivery and continuous monitoring adoption.",
+      "subheader": "New market outlook finds telemedicine in India moving from episodic virtual consultations toward integrated, longitudinal digital care models amid structural healthcare access gaps.",
       "tags": [
-        "Wearable Medical Devices",
-        "Chronic Disease Management",
+        "India Telemedicine Market",
+        "Digital Healthcare India",
+        "Virtual Care",
         "Remote Patient Monitoring",
-        "Digital Health",
-        "Medical Device Market"
+        "Teleconsultation Platforms"
       ],
-      "summary": "The global wearable medical devices market for chronic disease management is entering a structurally important phase as healthcare systems increasingly rely on continuous monitoring, decentralised care delivery, and data-driven disease management. The market was valued at US$42.0–45.0 billion in 2024 and is projected to reach US$90.0–95.0 billion by 2030, supported by sustained adoption across diabetes, cardiovascular, respiratory, and neurological care.",
-      "sourcePath": "content/newsroom/global-wearable-medical-devices-market-outlook-2030.md"
+      "summary": "The India telemedicine market outlook to 2030 highlights a structural transition in healthcare delivery as virtual care platforms become embedded across hospitals, clinics, employers, and homecare settings. Rising chronic disease prevalence, physician shortages, digital infrastructure expansion, and regulatory normalization continue to shape long-term market growth.",
+      "sourcePath": "content/newsroom/india-telemedicine-market-outlook-2030.md"
     },
     {
       "slug": "global-hospital-at-home-technology-market-outlook-2030",
@@ -120,22 +120,6 @@
       "sourcePath": "content/newsroom/global-hospital-at-home-technology-market-outlook-2030.md"
     },
     {
-      "slug": "us-advanced-energy-storage-market-outlook-2030",
-      "date": "2026-01-10",
-      "title": "US Advanced Energy Storage Market Outlook to 2030 Highlights Compliance-Led Growth Shift",
-      "industry": "Energy",
-      "subheader": "New analysis shows battery energy storage becoming foundational infrastructure as policy, grid strain, and enterprise monetization models reshape the US market.",
-      "tags": [
-        "Battery Energy Storage Systems (BESS)",
-        "Grid Scale Storage",
-        "FEOC Compliance",
-        "Grid Modernization",
-        "Lithium Ion Storage"
-      ],
-      "summary": "The US advanced energy storage market outlook to 2030 reflects a structural shift in how battery energy storage systems are deployed and monetized. Grid modernization, rising peak demand, and new federal compliance rules are accelerating adoption while raising execution and sourcing complexity for developers, enterprises, and investors.",
-      "sourcePath": "content/newsroom/us-advanced-energy-storage-market-outlook-2030.md"
-    },
-    {
       "slug": "global-cybersecurity-market-outlook-2030",
       "date": "2026-01-10",
       "title": "Global Cybersecurity Market Outlook to 2030 Highlights Platform-Led Security Shift",
@@ -150,6 +134,22 @@
       ],
       "summary": "The global cybersecurity market outlook to 2030 reflects a structural shift from fragmented, perimeter-based defenses toward integrated, identity-centric, and intelligence-driven security platforms. Rising threat intensity, regulatory enforcement, and enterprise digitalization are reshaping long-term security investment priorities across regions and industries.",
       "sourcePath": "content/newsroom/global-cybersecurity-market-outlook-2030.md"
+    },
+    {
+      "slug": "us-advanced-energy-storage-market-outlook-2030",
+      "date": "2026-01-10",
+      "title": "US Advanced Energy Storage Market Outlook to 2030 Highlights Compliance-Led Growth Shift",
+      "industry": "Energy",
+      "subheader": "New analysis shows battery energy storage becoming foundational infrastructure as policy, grid strain, and enterprise monetization models reshape the US market.",
+      "tags": [
+        "Battery Energy Storage Systems (BESS)",
+        "Grid Scale Storage",
+        "FEOC Compliance",
+        "Grid Modernization",
+        "Lithium Ion Storage"
+      ],
+      "summary": "The US advanced energy storage market outlook to 2030 reflects a structural shift in how battery energy storage systems are deployed and monetized. Grid modernization, rising peak demand, and new federal compliance rules are accelerating adoption while raising execution and sourcing complexity for developers, enterprises, and investors.",
+      "sourcePath": "content/newsroom/us-advanced-energy-storage-market-outlook-2030.md"
     },
     {
       "slug": "india-ai-infrastructure-market-outlook-2030",

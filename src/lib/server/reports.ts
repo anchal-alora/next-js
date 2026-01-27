@@ -1,9 +1,13 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { cache } from "react";
+import { cache as reactCache } from "react";
 import type { Report } from "@/lib/reportUtils";
 import type { ReportFaq } from "@/lib/faqTypes";
 import { renderMarkdownToHtml } from "@/lib/server/markdown";
+
+// In dev, we want content changes (markdown/MDX + generated JSON) to reflect immediately without restarting the server.
+// `react.cache()` is great for production but can hide updates during local authoring.
+const cache = process.env.NODE_ENV === "production" ? reactCache : (<T extends (...args: any[]) => any>(fn: T) => fn);
 
 export type ReportContent =
   | { kind: "html"; html: string; faqs: ReportFaq[] }

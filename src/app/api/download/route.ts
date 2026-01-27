@@ -1,8 +1,30 @@
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { prisma } from "@/lib/prisma";
 import { getSignedDownloadUrl } from "@/lib/r2";
 import { downloadRatelimit, getClientIp, checkRateLimit } from "@/lib/ratelimit";
+
+async function tryLocalPublicFallback(objectKey: string, requestUrl: string): Promise<string | null> {
+  // Dev-only escape hatch: if a PDF exists in `public/` locally, allow downloading it without R2.
+  // This keeps local testing simple while production continues to use signed R2 URLs.
+  const allow =
+    process.env.NODE_ENV !== "production" || String(process.env.ALLOW_PUBLIC_DOWNLOAD_FALLBACK ?? "") === "1";
+  if (!allow) return null;
+
+  const cleanKey = String(objectKey ?? "").replace(/^\/+/, "");
+  if (!cleanKey) return null;
+
+  const publicPath = path.join(process.cwd(), "public", cleanKey);
+  try {
+    await fs.access(publicPath);
+  } catch {
+    return null;
+  }
+
+  return new URL(`/${cleanKey}`, requestUrl).toString();
+}
 
 export async function GET(request: Request) {
   // Rate limiting
@@ -49,8 +71,12 @@ export async function GET(request: Request) {
   try {
     signedUrl = await getSignedDownloadUrl(record.objectKey, 60 * 15);
   } catch (error) {
-    console.error("Failed to sign R2 download", error);
-    return NextResponse.json({ error: "Download unavailable" }, { status: 500 });
+    const fallbackUrl = await tryLocalPublicFallback(record.objectKey, request.url);
+    if (!fallbackUrl) {
+      console.error("Failed to sign R2 download", error);
+      return NextResponse.json({ error: "Download unavailable" }, { status: 500 });
+    }
+    signedUrl = fallbackUrl;
   }
 
   await prisma.downloadToken.update({
