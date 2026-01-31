@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { ClientProviders } from "@/components/ClientProviders";
 
@@ -60,6 +61,7 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         ) : null}
         {children}
         <ClientProviders />
+        <Analytics />
       </body>
     </html>
   );
