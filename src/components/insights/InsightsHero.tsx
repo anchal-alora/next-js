@@ -34,7 +34,7 @@ export function InsightsHero({ report }: InsightsHeroProps) {
       {/* Desktop Layout: 60/40 split with overlap */}
       <div className="hidden md:grid md:grid-cols-[60%_40%] gap-0 relative">
         {/* Left Column: Image (60%) */}
-        <div className="relative h-[550px] lg:h-[650px] rounded-2xl overflow-hidden">
+        <div className="relative h-[380px] lg:h-[460px] rounded-2xl overflow-hidden">
           {report.image && (
             <OptimizedPicture
               imageKey={report.image}
@@ -52,47 +52,49 @@ export function InsightsHero({ report }: InsightsHeroProps) {
         {/* Right Column: Background (40%) */}
         <div className="bg-secondary/50" />
 
-        {/* White Content Card: Overlaps from right (10-15% overlap) */}
+        {/* Hero Card: Overlaps from right (10-15% overlap) */}
         <Link
           href={linkTo}
-          className="absolute right-[5%] top-1/2 -translate-y-1/2 w-[45%] bg-white rounded-2xl shadow-xl p-8 lg:p-10 z-10 group hover:scale-[1.02] transition-all duration-300 cursor-pointer block"
+          className="absolute right-[5%] top-1/2 -translate-y-1/2 w-[44%] z-10 p-1 bg-gradient-to-br from-primary via-purple-400 to-indigo-500 rounded-2xl group hover:scale-[1.02] transition-all duration-300 cursor-pointer block"
         >
-          {/* Top Row */}
-          <div className="flex items-start justify-between mb-6">
-            {/* Left: Report Type */}
-            <span className="text-sm font-semibold uppercase tracking-wider text-foreground">
-              {report.type}
-            </span>
-            {/* Right: Industry Icon and Name */}
-            {report.industry && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted">
-                <IndustryIcon className="w-4 h-4 text-muted-foreground" />
-                <span className="text-muted-foreground text-sm font-medium">{industryShort}</span>
+          <div className="bg-white rounded-[calc(1rem-2px)] shadow-xl p-5 lg:p-7">
+            {/* Top Row */}
+            <div className="flex items-start justify-between mb-4">
+              {/* Left: Report Type */}
+              <span className="text-sm font-semibold uppercase tracking-wider text-accent">
+                {report.type}
+              </span>
+              {/* Right: Industry Icon and Name */}
+              {report.industry && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted">
+                  <IndustryIcon className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-muted-foreground text-sm font-medium">{industryShort}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Main Content */}
+            <div className="mb-4">
+              <h2 className="font-display text-xl lg:text-2xl font-bold text-foreground mb-3 leading-tight line-clamp-2 group-hover:text-primary transition-colors duration-300">
+                {report.title}
+              </h2>
+              <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 mb-3">
+                {report.description}
+              </p>
+              {/* Divider Line */}
+              <div className="h-px bg-border" />
+            </div>
+
+            {/* Footer Row */}
+            <div className="flex items-center justify-between">
+              {/* Left: Date */}
+              {dateToShow && <span className="text-sm text-muted-foreground">{dateToShow}</span>}
+              {/* Right: CTA Button */}
+              <div onClick={(e) => e.stopPropagation()}>
+                <Button variant="default" size="default" className="hover:text-white">
+                  <span className="relative z-10 text-white">{ctaText}</span>
+                </Button>
               </div>
-            )}
-          </div>
-
-          {/* Main Content */}
-          <div className="mb-6">
-            <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4 leading-tight line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              {report.title}
-            </h2>
-            <p className="text-muted-foreground leading-relaxed line-clamp-4 mb-4">
-              {report.description}
-            </p>
-            {/* Divider Line */}
-            <div className="h-px bg-border" />
-          </div>
-
-          {/* Footer Row */}
-          <div className="flex items-center justify-between">
-            {/* Left: Date */}
-            {dateToShow && <span className="text-sm text-muted-foreground">{dateToShow}</span>}
-            {/* Right: CTA Button */}
-            <div onClick={(e) => e.stopPropagation()}>
-              <Button variant="default" size="default" className="hover:text-white">
-                <span className="relative z-10 text-white">{ctaText}</span>
-              </Button>
             </div>
           </div>
         </Link>
@@ -116,47 +118,49 @@ export function InsightsHero({ report }: InsightsHeroProps) {
           </div>
         )}
 
-        {/* White Card */}
+        {/* Hero Card */}
         <Link
           href={linkTo}
-          className="bg-white rounded-2xl shadow-xl p-6 -mt-20 sm:-mt-24 relative z-10 mx-4 block group hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+          className="relative z-10 mx-4 p-1 bg-gradient-to-br from-primary via-purple-400 to-indigo-500 rounded-2xl -mt-12 sm:-mt-14 group hover:scale-[1.02] transition-all duration-300 cursor-pointer block"
         >
-          {/* Top Row */}
-          <div className="flex items-start justify-between mb-4">
-            {/* Left: Report Type */}
-            <span className="text-sm font-semibold uppercase tracking-wider text-foreground">
-              {report.type}
-            </span>
-            {/* Right: Industry Icon and Name */}
-            {report.industry && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted">
-                <IndustryIcon className="w-4 h-4 text-muted-foreground" />
-                <span className="text-muted-foreground text-sm font-medium">{industryShort}</span>
+          <div className="bg-white rounded-[calc(1rem-2px)] shadow-xl p-5">
+            {/* Top Row */}
+            <div className="flex items-start justify-between mb-4">
+              {/* Left: Report Type */}
+              <span className="text-sm font-semibold uppercase tracking-wider text-accent">
+                {report.type}
+              </span>
+              {/* Right: Industry Icon and Name */}
+              {report.industry && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted">
+                  <IndustryIcon className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-muted-foreground text-sm font-medium">{industryShort}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Main Content */}
+            <div className="mb-4">
+              <h2 className="font-display text-xl font-bold text-foreground mb-3 leading-tight line-clamp-2 group-hover:text-primary transition-colors duration-300">
+                {report.title}
+              </h2>
+              <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 mb-4">
+                {report.description}
+              </p>
+              {/* Divider Line */}
+              <div className="h-px bg-border" />
+            </div>
+
+            {/* Footer Row */}
+            <div className="flex items-center justify-between">
+              {/* Left: Date */}
+              {dateToShow && <span className="text-sm text-muted-foreground">{dateToShow}</span>}
+              {/* Right: CTA Button */}
+              <div onClick={(e) => e.stopPropagation()}>
+                <Button variant="default" size="sm" className="hover:text-white">
+                  <span className="relative z-10 text-white">{ctaText}</span>
+                </Button>
               </div>
-            )}
-          </div>
-
-          {/* Main Content */}
-          <div className="mb-4">
-            <h2 className="font-display text-xl font-bold text-foreground mb-3 leading-tight line-clamp-2 group-hover:text-primary transition-colors duration-300">
-              {report.title}
-            </h2>
-            <p className="text-muted-foreground text-sm leading-relaxed line-clamp-4 mb-4">
-              {report.description}
-            </p>
-            {/* Divider Line */}
-            <div className="h-px bg-border" />
-          </div>
-
-          {/* Footer Row */}
-          <div className="flex items-center justify-between">
-            {/* Left: Date */}
-            {dateToShow && <span className="text-sm text-muted-foreground">{dateToShow}</span>}
-            {/* Right: CTA Button */}
-            <div onClick={(e) => e.stopPropagation()}>
-              <Button variant="default" size="sm" className="hover:text-white">
-                <span className="relative z-10 text-white">{ctaText}</span>
-              </Button>
             </div>
           </div>
         </Link>

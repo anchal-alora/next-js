@@ -18,7 +18,7 @@ import { getContactFormLink } from "@/lib/routes";
 
 const footerLinks = {
   company: [
-    { name: "Who We Are", path: "/who-we-are" },
+    { name: "About", path: "/about" },
     { name: "Careers", path: "/careers" },
     { name: "Contact", path: "/contact" },
     { name: "News", path: "/newsroom" },
@@ -26,8 +26,7 @@ const footerLinks = {
   resources: [
     { name: "Explore Insights", path: "/insights/explore" },
     { name: "Case Studies", path: `/insights/explore?type=${encodeURIComponent("Case Study")}` },
-    { name: "Research Report", path: `/insights/explore?type=${encodeURIComponent("Research Report")}` },
-    { name: "Sample Report", path: `/insights/explore?type=${encodeURIComponent("Sample Report")}` },
+    { name: "Market Report", path: `/insights/explore?${new URLSearchParams({ type: "Market Overview" }).toString()}` },
   ],
 };
 
@@ -79,7 +78,7 @@ export default function Footer() {
                   Stay Informed
                 </h3>
                 <p className="text-muted-foreground">
-                  Subscribe to our newsletter for the latest insights, trends, and strategic perspectives.
+                  Subscribe to our newsletter for the latest insights, trends, and strategic perspectives delivered directly to your inbox.
                 </p>
               </div>
               <form

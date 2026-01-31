@@ -1,7 +1,6 @@
 "use client";
 
 import { FileSearch, Compass, Users, Award, Search, Target, Handshake, TrendingUp } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 
 interface CareerLevel {
   level: string;
@@ -79,24 +78,7 @@ const careerLevels: CareerLevel[] = [
 ];
 
 export default function CareerJourney() {
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const [svgRect, setSvgRect] = useState({ width: 900, height: 360 });
   const skylineHref = "/assets/site/skyline.png";
-
-  useEffect(() => {
-    const el = svgRef.current;
-    if (!el) return;
-
-    const update = () => {
-      const rect = el.getBoundingClientRect();
-      setSvgRect({ width: rect.width, height: rect.height });
-    };
-
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
 
   // Calculate stepped path (ladder only)
   const pathPoints = [
@@ -128,7 +110,6 @@ export default function CareerJourney() {
   return (
     <div className="relative w-full max-w-6xl mx-auto">
       <svg
-        ref={svgRef}
         viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
         className="w-full h-auto"
         preserveAspectRatio="xMidYMid meet"
@@ -177,7 +158,7 @@ export default function CareerJourney() {
         />
 
         {/* Step boxes and cards */}
-        {careerLevels.map((level, index) => {
+        {careerLevels.map((level) => {
           const CardIcon = level.cardIcon;
           const StepIcon = level.stepIcon;
 

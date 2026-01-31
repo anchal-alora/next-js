@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Layout from "@/components/layout/Layout";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -17,7 +16,6 @@ interface CookiePreferences {
 }
 
 export default function Cookies() {
-  const pathname = usePathname();
   const [preferences, setPreferences] = useState<CookiePreferences>({
     necessary: true,
     analytics: false,
@@ -226,7 +224,7 @@ export default function Cookies() {
                 5. Third-Party Cookies
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                Some cookies may be set by third-party services (e.g., analytics providers). We do not control these cookies and recommend reviewing the respective providers' policies.
+                Some cookies may be set by third-party services (e.g., analytics providers). We do not control these cookies and recommend reviewing the respective providers’ policies.
               </p>
             </ScrollReveal>
 

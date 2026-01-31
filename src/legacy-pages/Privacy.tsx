@@ -1,11 +1,9 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import Layout from "@/components/layout/Layout";
 import { ScrollReveal } from "@/components/ScrollReveal";
 
 export default function Privacy() {
-  const pathname = usePathname();
   return (
     <Layout>
       
@@ -32,7 +30,7 @@ export default function Privacy() {
           <div className="max-w-3xl mx-auto">
             <ScrollReveal>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Alora Advisory ("Alora Advisory," "we," "our," or "us") is committed to protecting the privacy and confidentiality of visitors to our website and individuals who engage with us. This Privacy Statement explains how we collect, use, and protect personal information.
+                Alora Advisory (“Alora Advisory,” “we,” “our,” or “us”) is committed to protecting the privacy and confidentiality of visitors to our website and individuals who engage with us. This Privacy Statement explains how we collect, use, and protect personal information.
               </p>
             </ScrollReveal>
 

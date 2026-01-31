@@ -1,11 +1,9 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import Layout from "@/components/layout/Layout";
 import { ScrollReveal } from "@/components/ScrollReveal";
 
 export default function Terms() {
-  const pathname = usePathname();
   return (
     <Layout>
       

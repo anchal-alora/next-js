@@ -1,4 +1,4 @@
-import type { SyntheticEvent } from "react";
+import type { ComponentProps, SyntheticEvent } from "react";
 import Image from "next/image";
 import { IMAGE_MASTERS } from "@/generated/image-masters";
 
@@ -40,16 +40,36 @@ export function OptimizedPicture({
   if (!entry) {
     // If the key is already a URL (e.g. /insights/image/...), render it directly.
     if (imageKey.startsWith("/")) {
+      if (fill) {
+        const basePos = hasExplicitPositionClass(wrapperClassName) ? "" : "relative";
+        return (
+          <span className={[basePos, "block", wrapperClassName].filter(Boolean).join(" ")}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imageKey}
+              alt={alt}
+              className={["absolute inset-0 w-full h-full", className].filter(Boolean).join(" ")}
+              loading={loading}
+              decoding={decoding}
+              {...(fetchPriority ? { fetchPriority } : {})}
+              onError={onError}
+            />
+          </span>
+        );
+      }
       return (
-        <img
-          src={imageKey}
-          alt={alt}
-          className={className}
-          loading={loading}
-          decoding={decoding}
-          {...(fetchPriority ? { fetchPriority } : {})}
-          onError={onError}
-        />
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageKey}
+            alt={alt}
+            className={className}
+            loading={loading}
+            decoding={decoding}
+            {...(fetchPriority ? { fetchPriority } : {})}
+            onError={onError}
+          />
+        </>
       );
     }
     return null;
@@ -76,7 +96,7 @@ export function OptimizedPicture({
           loading={loading}
           {...(fetchPriority ? { fetchPriority } : {})}
           // next/image uses the underlying <img> event type.
-          onError={onError as any}
+          onError={onError as unknown as ComponentProps<typeof Image>["onError"]}
         />
       </span>
     );
@@ -93,7 +113,7 @@ export function OptimizedPicture({
       priority={priority}
       loading={loading}
       {...(fetchPriority ? { fetchPriority } : {})}
-      onError={onError as any}
+      onError={onError as unknown as ComponentProps<typeof Image>["onError"]}
     />
   );
 }

@@ -16,7 +16,7 @@ Alora Advisory provides market research and strategic advisory insights for tech
 - ${SITE_URL}/newsroom
 - ${SITE_URL}/services
 - ${SITE_URL}/industries
-- ${SITE_URL}/who-we-are
+- ${SITE_URL}/about
 - ${SITE_URL}/contact
 
 ## Crawling guidance

@@ -93,7 +93,7 @@ export default function NewsroomDetail({ article, latestArticles, relatedResourc
             </div>
 
             <aside className="lg:col-span-4">
-              <div className="lg:sticky lg:top-24 space-y-6">
+              <div className="sticky-sidebar space-y-6">
                 <div className="card-elevated p-4">
                   <h3 className="font-display text-sm font-semibold text-foreground mb-3">
                     Share

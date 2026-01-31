@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useQueryParams } from "@/hooks/useQueryParams";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Layout from "@/components/layout/Layout";
 import { ExploreFilters } from "@/components/insights/ExploreFilters";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,10 @@ import { useSavedInsights } from "@/hooks/useSavedInsights";
 import { OptimizedPicture } from "@/components/shared/OptimizedPicture";
 import { Pagination } from "@/components/shared/Pagination";
 import { formatIstDateLong } from "@/lib/istDate";
+import { Search } from "lucide-react";
+import { SearchCombobox } from "@/components/search/SearchCombobox";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 9;
 
 function parsePositiveInt(value: string | null): number | null {
   if (!value) return null;
@@ -29,30 +31,92 @@ export default function Explore() {
   const allReports = reportsData.reports as Report[];
   const { savedIds } = useSavedInsights();
   const resultsTopRef = useRef<HTMLDivElement | null>(null);
+  const didHashScrollRef = useRef(false);
+
+  const queryInput = searchParams.get("q") ?? "";
+  const [searchText, setSearchText] = useState(queryInput);
+
+  useEffect(() => {
+    setSearchText(queryInput);
+  }, [queryInput]);
 
   function scrollResultsToTop() {
     resultsTopRef.current?.scrollIntoView({ behavior: "auto", block: "start" });
   }
 
+  useEffect(() => {
+    if (didHashScrollRef.current) return;
+    if (typeof window === "undefined") return;
+    if (window.location.hash !== "#results") return;
+    didHashScrollRef.current = true;
+    window.requestAnimationFrame(() => scrollResultsToTop());
+  }, []);
+
   // Get filter values from URL
   const selectedIndustries = searchParams.getAll("industry");
+  const selectedTypes = searchParams.getAll("type");
   const savedOnly = searchParams.get("saved") === "1";
+  const query = queryInput.trim();
+  const keywordFilters = searchParams.getAll("kw").map((k) => k.trim()).filter(Boolean);
+
+  const normalizeForSearch = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/,/g, "")
+      .replace(/['’]/g, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+
+  const normalizedQuery = normalizeForSearch(query);
+  const normalizedKeywords = keywordFilters.map(normalizeForSearch).filter(Boolean);
 
   // Filter reports based on query parameters
   // AND between categories, OR within same category
   // Filter order: industry first, then saved=1 narrows results further
   const filteredReports = allReports.filter((report) => {
+    const keywordMatch =
+      normalizedKeywords.length === 0 ||
+      (() => {
+        const keywordHaystack = normalizeForSearch(
+          [
+            report.title,
+            report.description,
+            ...(Array.isArray(report.taggings) ? report.taggings : []),
+          ]
+            .filter(Boolean)
+            .join(" "),
+        );
+        return normalizedKeywords.every((kw) => keywordHaystack.includes(kw));
+      })();
+
+    const queryMatch =
+      normalizedQuery.length === 0 ||
+      [
+        report.title,
+        report.description,
+        report.industry,
+        report.type,
+        report.contentFormat,
+        report.placement,
+        ...(Array.isArray(report.taggings) ? report.taggings : []),
+      ]
+        .filter(Boolean)
+        .some((value) => normalizeForSearch(value).includes(normalizedQuery));
+
     // Industry filter (OR within category) - normalize both sides to short names for comparison
     const reportIndustryShort = getIndustryShortLabel(report.industry || "");
     const normalizedSelected = selectedIndustries.map((ind) => getIndustryShortLabel(ind));
     const industryMatch =
       selectedIndustries.length === 0 || normalizedSelected.includes(reportIndustryShort);
 
+    // Content type filter
+    const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(report.type || "");
+
     // Saved filter (applied AFTER industry filter)
     const savedMatch = !savedOnly || savedIds.has(report.id);
 
     // AND between categories
-    return industryMatch && savedMatch;
+    return keywordMatch && queryMatch && industryMatch && typeMatch && savedMatch;
   });
 
   // Sort filtered results using default sort order
@@ -105,6 +169,46 @@ export default function Explore() {
               Alora Advisory publishes insights that help leaders understand market change,
               competitive dynamics, and their implications across industries.
             </p>
+
+	            <form
+	              onSubmit={(event) => {
+	                event.preventDefault();
+	                const next = new URLSearchParams(searchParams);
+	                const q = searchText.trim();
+
+	                if (q) next.set("q", q);
+	                else next.delete("q");
+
+	                next.delete("page");
+	                setSearchParams(next);
+	                scrollResultsToTop();
+	              }}
+	              className="mt-10 max-w-3xl"
+	            >
+	              <div className="relative group">
+	                <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+	                <SearchCombobox
+	                  scope="insights"
+	                  value={searchText}
+	                  onValueChange={setSearchText}
+	                  placeholder="Search our insights, reports and analysis..."
+	                  portalDropdown
+	                  metaVariant="insights"
+	                  containerClassName="relative"
+	                  inputWrapperClassName="relative bg-white/95 dark:bg-slate-800/90 rounded-full shadow-2xl p-2 flex items-center"
+	                  leading={<Search className="text-slate-400 ml-6 mr-3 h-5 w-5" aria-hidden="true" />}
+	                  inputClassName="w-full bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:border-0 focus-visible:border-0 text-slate-900 dark:text-white placeholder-slate-400 py-4"
+	                  trailing={
+	                    <button
+	                      type="submit"
+	                      className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-full font-semibold transition-all shadow-lg mr-1"
+	                    >
+	                      Search
+	                    </button>
+	                  }
+	                />
+	              </div>
+	            </form>
           </div>
         </div>
       </section>
@@ -119,7 +223,7 @@ export default function Explore() {
 
           {/* Results */}
           <div>
-            <div ref={resultsTopRef} />
+            <div ref={resultsTopRef} id="results" />
             <div className="mb-6">
               <p className="text-muted-foreground">
                 {sortedReports.length === 0
@@ -132,7 +236,7 @@ export default function Explore() {
 
             {sortedReports.length > 0 ? (
               <>
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {pagedReports.map((report) => {
                     const industryShort = getIndustryShortLabel(
                       report.industry || "Technology and AI",

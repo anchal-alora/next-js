@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -16,20 +16,20 @@ import Layout from "@/components/layout/Layout";
 import SectionHeader from "@/components/shared/SectionHeader";
 import { OptimizedPicture } from "@/components/shared/OptimizedPicture";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { FileText, ChevronRight, ArrowUpRight, ArrowRight } from "lucide-react";
+import { FileText, ChevronRight, ArrowUpRight, ArrowRight, Search } from "lucide-react";
 import reportsData from "../../reports-link.json";
 import { assignReportsToSectionsWithInsightsHero, type Report } from "@/lib/reportUtils";
-import { ReportCard } from "@/components/reports/ReportCard";
 import { FeaturedInsightsInfographic, InsightsHero } from "@/components/insights";
 import { getIndustryConfig, getIndustryShortLabel } from "@/lib/industryConfig";
 import { getContactFormLink } from "@/lib/routes";
 import { formatIstDateLong } from "@/lib/istDate";
+import { SearchCombobox } from "@/components/search/SearchCombobox";
 
 export default function Insights() {
-  const pathname = usePathname();
+  const router = useRouter();
+  const [heroSearchValue, setHeroSearchValue] = useState("");
   const [caseStudiesApi, setCaseStudiesApi] = useState<CarouselApi>();
   const [caseStudiesCount, setCaseStudiesCount] = useState(0);
-  const [caseStudiesCurrent, setCaseStudiesCurrent] = useState(0);
   const [researchReportsApi, setResearchReportsApi] = useState<CarouselApi>();
   const [researchReportsCount, setResearchReportsCount] = useState(0);
   const [researchReportsCurrent, setResearchReportsCurrent] = useState(0);
@@ -46,7 +46,6 @@ export default function Insights() {
 
     const onSelect = () => {
       setCaseStudiesCount(caseStudiesApi.scrollSnapList().length);
-      setCaseStudiesCurrent(caseStudiesApi.selectedScrollSnap());
     };
 
     onSelect();
@@ -135,6 +134,45 @@ export default function Insights() {
               <p className="text-lg md:text-xl text-primary-foreground/80 leading-relaxed">
                 A curated selection of recent content reflecting how Alora Advisory interprets market signals, industry change, and strategic risk.
               </p>
+
+	              <form
+	                className="mt-10"
+		                onSubmit={(event) => {
+		                  event.preventDefault();
+		                  const query = heroSearchValue.trim();
+		                  const href = query ? `/insights/explore?q=${encodeURIComponent(query)}#results` : "/insights/explore";
+		                  router.push(href);
+		                }}
+		              >
+	                <div className="max-w-3xl mx-auto relative group">
+	                  <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+	                  <SearchCombobox
+	                    scope="insights"
+	                    value={heroSearchValue}
+	                    onValueChange={setHeroSearchValue}
+	                    placeholder="Search our insights, reports and analysis..."
+	                    portalDropdown
+	                    metaVariant="insights"
+	                    containerClassName="relative"
+	                    inputWrapperClassName="relative bg-white dark:bg-slate-800 rounded-full shadow-2xl p-2 flex items-center"
+	                    leading={<Search className="text-slate-400 ml-6 mr-3 h-5 w-5" aria-hidden="true" />}
+	                    inputClassName="w-full bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:border-0 focus-visible:border-0 text-slate-900 dark:text-white placeholder-slate-400 py-4"
+		                    onSubmit={(raw) => {
+		                      const query = raw.trim();
+		                      const href = query ? `/insights/explore?q=${encodeURIComponent(query)}#results` : "/insights/explore";
+		                      router.push(href);
+		                    }}
+	                    trailing={
+	                      <button
+	                        type="submit"
+	                        className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-full font-semibold transition-all shadow-lg mr-1"
+	                      >
+	                        Search
+	                      </button>
+	                    }
+	                  />
+	                </div>
+	              </form>
             </div>
           </ScrollReveal>
         </div>
@@ -152,45 +190,41 @@ export default function Insights() {
       )}
 
       {/* Insights Hero */}
-      {insightsHeroReport && (
+      {/* Featured Insights (includes Hero Insight) */}
+      {(insightsHeroReport || featuredInsights.length > 0) && (
         <section className="py-8 md:py-12">
           <div className="container-wide">
-            <InsightsHero report={insightsHeroReport} />
-            <div className="mt-8">
-              <Button asChild variant="outline" className="group relative overflow-hidden">
-                <Link href="/insights/explore" >
-                  <span className="relative z-10 flex items-center gap-2">
-                    Explore All Insights
-                    <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Featured Insights */}
-      {featuredInsights.length > 0 && (
-        <section className="py-8 md:py-12">
-          <div className="container-wide">
-            <div className="flex items-center justify-between mb-12">
+            <div className="flex items-center justify-between mb-8 md:mb-10">
               <h2 className="font-display text-2xl md:text-3xl font-semibold text-foreground">
                 Featured Insights
               </h2>
+              <Link
+                href="/insights/explore"
+                className="text-primary font-semibold flex items-center gap-1"
+              >
+                Explore All
+                <ChevronRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              {featuredInsights.map((report, index) => (
-                <FeaturedInsightsInfographic
-                  key={report.id}
-                  report={report}
-                  className="opacity-0 animate-fade-in-up"
-                  style={{ animationDelay: `${index * 100}ms`, animationFillMode: "forwards" }}
-                />
-              ))}
-            </div>
+            {insightsHeroReport ? (
+              <div className="mb-8 md:mb-10">
+                <InsightsHero report={insightsHeroReport} />
+              </div>
+            ) : null}
+
+	            {featuredInsights.length > 0 ? (
+	              <div className="grid md:grid-cols-2 gap-8">
+	                {(insightsHeroReport ? featuredInsights.slice(0, 2) : featuredInsights).map((report, index) => (
+	                  <FeaturedInsightsInfographic
+	                    key={report.id}
+	                    report={report}
+	                    className="opacity-0 animate-fade-in-up"
+	                    style={{ animationDelay: `${index * 100}ms`, animationFillMode: "forwards" }}
+	                  />
+	                ))}
+	              </div>
+	            ) : null}
 
             <div className="mt-12 flex justify-center">
               <Button asChild variant="default" size="lg" className="group relative overflow-hidden">
@@ -215,11 +249,11 @@ export default function Insights() {
               </h2>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              {recentArticles.slice(0, 2).map((report, index) => {
-                const industryShort = getIndustryShortLabel(report.industry || "Technology and AI");
-                const config = getIndustryConfig(industryShort);
-                const IndustryIcon = config.icon;
+	            <div className="grid md:grid-cols-2 gap-8">
+	              {recentArticles.slice(0, 2).map((report, index) => {
+	                const industryShort = getIndustryShortLabel(report.industry || "Technology and AI");
+	                const config = getIndustryConfig(industryShort);
+	                const IndustryIcon = config.icon;
                 const linkTo = `/insights/${report.slug}`;
                 const dateToShow = formatIstDateLong(report.date);
                 const ctaText = report.placement === "Case Studies"

@@ -84,7 +84,7 @@ export default function NewsroomListing({ articles }: NewsroomListingProps) {
               Latest Announcements
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/80 leading-relaxed animate-fade-in-up animation-delay-100">
-              Stay informed about Alora Advisory's latest market research, strategic insights, and industry announcements.
+              Stay informed about Alora Advisory’s latest market research, strategic insights, and industry announcements.
             </p>
           </div>
         </div>

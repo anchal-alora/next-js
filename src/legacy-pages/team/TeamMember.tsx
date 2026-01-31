@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { getAuthorBySlug, type Author } from "@/lib/authors";
@@ -15,7 +15,6 @@ interface TeamMemberProps {
 
 export default function TeamMember({ author: authorProp }: TeamMemberProps) {
   const { slug } = useParams<{ slug: string }>();
-  const pathname = usePathname();
   const author = authorProp ?? (slug ? getAuthorBySlug(slug) : null);
 
   if (!author) {
@@ -29,10 +28,10 @@ export default function TeamMember({ author: authorProp }: TeamMemberProps) {
                 Team Member not found
               </h1>
               <p className="text-muted-foreground mb-6">
-                The team member you're looking for doesn't exist.
+                The team member you’re looking for doesn’t exist.
               </p>
               <Button asChild>
-                <Link href="/who-we-are">Return to Who We Are</Link>
+                <Link href="/about">Return to About</Link>
               </Button>
             </div>
           </div>
@@ -41,29 +40,6 @@ export default function TeamMember({ author: authorProp }: TeamMemberProps) {
     );
   }
 
-  const authorUrl = `https://aloraadvisory.com${pathname}`;
-  const personSchema = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "@id": `${authorUrl}#person`,
-    name: author.name,
-    jobTitle: author.role,
-    description: author.bio,
-    ...(author.image && { image: `https://aloraadvisory.com${author.image}` }),
-    ...(author.linkedin && {
-      sameAs: [
-        author.linkedin,
-        ...(author.twitter ? [author.twitter] : []),
-      ],
-    }),
-    ...(author.email && { email: author.email }),
-    affiliation: {
-      "@type": "Organization",
-      "@id": "https://aloraadvisory.com/#organization",
-      name: "Alora Advisory",
-    },
-  };
-
   return (
     <Layout>
       
@@ -71,9 +47,9 @@ export default function TeamMember({ author: authorProp }: TeamMemberProps) {
         <div className="container-wide">
           <div className="mb-8">
             <Button variant="ghost" asChild>
-              <Link href="/who-we-are" className="flex items-center gap-2">
+              <Link href="/about" className="flex items-center gap-2">
                 <ArrowLeft className="w-4 h-4" />
-                Back to Who We Are
+                Back to About
               </Link>
             </Button>
           </div>

@@ -2,7 +2,7 @@
 
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { cn } from "@/lib/utils";
-import { ReactNode, useEffect, useState, Children } from "react";
+import { ReactNode, useCallback, useEffect, useState, Children } from "react";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -54,21 +54,22 @@ export const ScrollReveal = ({
   };
 
   // Respect prefers-reduced-motion
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
+
+  const handleReducedMotionChange = useCallback((e: MediaQueryListEvent) => {
+    setPrefersReducedMotion(e.matches);
+  }, []);
   
   useEffect(() => {
     if (typeof window !== "undefined") {
       const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-      setPrefersReducedMotion(mediaQuery.matches);
-      
-      const handleChange = (e: MediaQueryListEvent) => {
-        setPrefersReducedMotion(e.matches);
-      };
-      
-      mediaQuery.addEventListener("change", handleChange);
-      return () => mediaQuery.removeEventListener("change", handleChange);
+      mediaQuery.addEventListener("change", handleReducedMotionChange);
+      return () => mediaQuery.removeEventListener("change", handleReducedMotionChange);
     }
-  }, []);
+  }, [handleReducedMotionChange]);
   
   const effectiveDuration = prefersReducedMotion ? 0 : duration;
 

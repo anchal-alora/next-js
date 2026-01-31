@@ -1,4 +1,5 @@
-import { Cpu, Car, HeartPulse, Factory, Briefcase, Building2, Leaf, ShoppingBag, Zap, LucideIcon } from "lucide-react";
+import { createElement, type ReactElement } from "react";
+import { Cpu, Car, HeartPulse, Factory, Briefcase, Building2, Leaf, ShoppingBag, Zap, type LucideIcon, type LucideProps } from "lucide-react";
 
 export interface IndustryConfig {
   icon: LucideIcon;
@@ -90,8 +91,9 @@ export const getIndustryShortLabel = (industry: string): string => {
   return shortLabelMap[trimmed] || trimmed;
 };
 
-export const getIndustryIcon = (industry: string): LucideIcon => {
-  return getIndustryConfig(industry).icon;
+export const getIndustryIcon = (industry: string, props?: LucideProps): ReactElement => {
+  const Icon = getIndustryConfig(industry).icon;
+  return createElement(Icon, props);
 };
 
 // Report type configuration

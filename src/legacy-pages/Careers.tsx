@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,33 +10,11 @@ import SectionHeader from "@/components/shared/SectionHeader";
 import CareerJourney from "@/components/careers/CareerJourney";
 import { OptimizedPicture } from "@/components/shared/OptimizedPicture";
 import { toast } from "sonner";
-import { ArrowRight, Briefcase, Users, GraduationCap, Heart, TrendingUp, Globe, CheckCircle2, MapPin, Brain, Search, MessageSquare, Shield } from "lucide-react";
+import { ArrowRight, CheckCircle2, Brain, Search, MessageSquare, Shield } from "lucide-react";
 import { submitForm, getTrackingFields } from "@/lib/forms";
 import { validateEmail, required } from "@/lib/formValidation";
 import { FormErrorSummary } from "@/components/forms/FormErrorSummary";
 import { FieldError } from "@/components/forms/FieldError";
-const benefits = [
-  {
-    icon: TrendingUp,
-    title: "Professional Growth",
-    description: "Accelerate your career with challenging projects, mentorship, and continuous learning opportunities.",
-  },
-  {
-    icon: Users,
-    title: "Collaborative Culture",
-    description: "Work alongside exceptional colleagues in a supportive, team-oriented environment.",
-  },
-  {
-    icon: Globe,
-    title: "Global Opportunities",
-    description: "Access to international projects and the chance to work across our 15 global offices.",
-  },
-  {
-    icon: Heart,
-    title: "Work-Life Balance",
-    description: "Flexible arrangements, generous time off, and programs that support your wellbeing.",
-  },
-];
 
 const whatWeLookFor = [
   {
@@ -63,54 +39,7 @@ const whatWeLookFor = [
   },
 ];
 
-const openPositions = [
-  {
-    title: "Senior Consultant, Strategy",
-    location: "New York, NY",
-    type: "Full-time",
-    experience: "3-5 years",
-    description: "Lead strategic engagements for Fortune 500 clients across industries.",
-  },
-  {
-    title: "Manager, Operations Excellence",
-    location: "Chicago, IL",
-    type: "Full-time",
-    experience: "5-7 years",
-    description: "Drive operational transformation initiatives for leading organizations.",
-  },
-  {
-    title: "Associate, Digital Transformation",
-    location: "San Francisco, CA",
-    type: "Full-time",
-    experience: "1-3 years",
-    description: "Support digital strategy and technology implementation projects.",
-  },
-  {
-    title: "Senior Manager, M&A Advisory",
-    location: "London, UK",
-    type: "Full-time",
-    experience: "7-10 years",
-    description: "Lead M&A due diligence and post-merger integration engagements.",
-  },
-  {
-    title: "Consultant, Healthcare",
-    location: "Boston, MA",
-    type: "Full-time",
-    experience: "2-4 years",
-    description: "Deliver strategic and operational consulting to healthcare clients.",
-  },
-  {
-    title: "Summer Associate Program",
-    location: "Multiple Locations",
-    type: "Internship",
-    experience: "MBA Students",
-    description: "10-week program for top MBA students to experience consulting firsthand.",
-  },
-];
-
-
 export default function Careers() {
-  const pathname = usePathname();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",

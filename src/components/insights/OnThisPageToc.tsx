@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 
 interface TocItem {
@@ -37,6 +37,45 @@ function ensureUniqueId(id: string, existingIds: Set<string>): string {
   return uniqueId;
 }
 
+type TocState = {
+  headings: TocItem[];
+  activeId: string | null;
+  expandedH2Ids: Set<string>;
+};
+
+const createInitialTocState = (): TocState => ({
+  headings: [],
+  activeId: null,
+  expandedH2Ids: new Set(),
+});
+
+function createTocStore() {
+  let state = createInitialTocState();
+  const serverSnapshot = createInitialTocState();
+  const listeners = new Set<() => void>();
+
+  const emit = () => {
+    for (const listener of listeners) listener();
+  };
+
+  return {
+    getSnapshot: () => state,
+    getServerSnapshot: () => serverSnapshot,
+    subscribe: (listener: () => void) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+    setState: (next: TocState) => {
+      state = next;
+      emit();
+    },
+    update: (fn: (prev: TocState) => TocState) => {
+      state = fn(state);
+      emit();
+    },
+  };
+}
+
 export function OnThisPageToc({
   containerRef,
   contentKey,
@@ -44,10 +83,13 @@ export function OnThisPageToc({
   stickyTopOffset = "top-24",
   isSticky = true,
 }: OnThisPageTocProps) {
-  // STATE
-  const [headings, setHeadings] = useState<TocItem[]>([]);
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [expandedH2Ids, setExpandedH2Ids] = useState<Set<string>>(new Set());
+  const [store] = useState(() => createTocStore());
+
+  const { headings, activeId, expandedH2Ids } = useSyncExternalStore(
+    store.subscribe,
+    store.getSnapshot,
+    store.getServerSnapshot
+  );
 
   // REFS (avoid stale closures)
   const headingsRef = useRef<TocItem[]>([]);
@@ -59,11 +101,9 @@ export function OnThisPageToc({
   useEffect(() => {
     const container = containerRef.current;
     if (!container) {
-      setHeadings([]);
       headingsRef.current = [];
       parentH2MapRef.current = new Map();
-      setActiveId(null);
-      setExpandedH2Ids(new Set());
+      store.setState(createInitialTocState());
       return;
     }
 
@@ -111,16 +151,18 @@ export function OnThisPageToc({
       });
     }
 
-    setHeadings(items);
     headingsRef.current = items;
     parentH2MapRef.current = parentMap;
 
-    // Optional: auto-expand first H2 by default (nice UX)
     const firstH2 = items.find((h) => h.level === 2);
-    setExpandedH2Ids(firstH2 ? new Set([firstH2.id]) : new Set());
+    store.setState({
+      headings: items,
+      activeId: null,
+      expandedH2Ids: firstH2 ? new Set([firstH2.id]) : new Set(),
+    });
     // ✅ Remove setActiveId - let IntersectionObserver determine active based on scroll position
     // This prevents incorrect highlight on mid-scroll loads
-  }, [contentKey, containerRef]); // ✅ only rebuild when content changes (report.slug)
+  }, [contentKey, containerRef, store]); // ✅ only rebuild when content changes (report.slug)
 
   // ------------------------------------------------------------
   // EFFECT B: Attach IntersectionObserver (runs when headings ready)
@@ -157,17 +199,30 @@ export function OnThisPageToc({
         const id = (best.target as HTMLElement).id;
         if (!id) return;
 
-        setActiveId(id);
+        store.update((prev) => {
+          const parentH2Id = parentH2MapRef.current.get(id);
+          if (parentH2Id) {
+            return {
+              ...prev,
+              activeId: id,
+              expandedH2Ids: new Set([parentH2Id]),
+            };
+          }
 
-        // ✅ Auto-expand ONLY the active H2
-        const parentH2Id = parentH2MapRef.current.get(id);
-        if (parentH2Id) {
-          setExpandedH2Ids(new Set([parentH2Id]));
-        } else {
-          // Active is likely H2 itself
           const h = headingsRef.current.find((x) => x.id === id);
-          if (h?.level === 2) setExpandedH2Ids(new Set([id]));
-        }
+          if (h?.level === 2) {
+            return {
+              ...prev,
+              activeId: id,
+              expandedH2Ids: new Set([id]),
+            };
+          }
+
+          return {
+            ...prev,
+            activeId: id,
+          };
+        });
       },
       {
         root: null,
@@ -181,7 +236,7 @@ export function OnThisPageToc({
 
     // ✅ Cleanup prevents duplicated observers across route changes
     return () => observer.disconnect();
-  }, [headings, contentKey]); // headings changes after rebuild; contentKey ensures clean swap
+  }, [headings, contentKey, store]); // headings changes after rebuild; contentKey ensures clean swap
 
   if (headings.length === 0) return null;
 
@@ -200,10 +255,6 @@ export function OnThisPageToc({
     headings.forEach((heading) => {
       if (heading.level === 2) {
         currentH2 = heading;
-        const isExpanded = expandedH2Ids.has(heading.id);
-        const hasChildren = headings.some(
-          (h) => h.parentH2Id === heading.id
-        );
 
         result.push(
           <div key={heading.id} className="mb-2">

@@ -5,6 +5,5 @@ export const servicesData: NavItem[] = [
   { id: "competitive-intelligence", title: "Competitive Intelligence and Strategic Positioning", shortTitle: "Competitive Intelligence" },
   { id: "go-to-market", title: "Go to Market and Growth Strategy", shortTitle: "Go to Market" },
   { id: "customer-insights", title: "Customer and Industry Insights", shortTitle: "Customer Insights" },
-  { id: "custom-advisory", title: "Custom Advisory Engagements" },
+  { id: "custom-advisory", title: "Custom Advisory Engagements", shortTitle: "Custom Engagement" },
 ];
-

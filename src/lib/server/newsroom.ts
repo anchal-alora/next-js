@@ -7,7 +7,10 @@ import type { NewsroomArticle } from "@/lib/newsroomTypes";
 
 // In dev, we want content changes (markdown + generated JSON) to reflect immediately without restarting the server.
 // `react.cache()` is great for production but can hide updates during local authoring.
-const cache = process.env.NODE_ENV === "production" ? reactCache : (<T extends (...args: any[]) => any>(fn: T) => fn);
+const cache: typeof reactCache =
+  process.env.NODE_ENV === "production"
+    ? reactCache
+    : ((<T extends (...args: unknown[]) => unknown>(fn: T) => fn) as unknown as typeof reactCache);
 
 type NewsroomIndexEntry = {
   slug: string;

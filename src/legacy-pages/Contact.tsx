@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -75,7 +74,6 @@ const SUBJECT_MAX = 100;
 const MESSAGE_COUNT_THRESHOLD = Math.ceil(MESSAGE_MAX * 0.85);
 
 export default function Contact() {
-  const pathname = usePathname();
   const phoneCountries = useMemo(() => getPhoneCountryOptions(), []);
   const phoneCountriesByCode = useMemo(
     () => new Map(phoneCountries.map((option) => [option.country, option])),
@@ -248,11 +246,11 @@ export default function Contact() {
                 Contact Us
               </span>
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-                Let's Start a
+                Let’s Start a
                 <span className="text-accent"> Conversation</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              If you're exploring a market opportunity, evaluating a strategic decision, or seeking clarity on how Alora Advisory works, we welcome the conversation.
+              If you’re exploring a market opportunity, evaluating a strategic decision, or seeking clarity on how Alora Advisory works, we welcome the conversation.
               </p>
             </div>
           </ScrollReveal>
@@ -452,7 +450,7 @@ export default function Contact() {
                   General Inquiries
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  We're here to help. Reach out through any of the channels below, and our team will respond to you soon.
+                  We’re here to help. Reach out through any of the channels below, and our team will respond to you soon.
                 </p>
                 <div className="card-elevated p-6">
                   <div className="space-y-4">

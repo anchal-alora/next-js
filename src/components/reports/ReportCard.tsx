@@ -12,7 +12,7 @@ interface ReportCardProps {
 
 export function ReportCard({ report, ctaVariant = "default", className = "" }: ReportCardProps) {
   // CTA Logic (Centralized)
-  const isCaseStudy = report.placement === "Case Studies";
+  const isCaseStudy = ctaVariant === "caseStudy" || report.placement === "Case Studies";
   const getCtaText = () => {
     if (isCaseStudy) {
       return "Read Full Case Study";

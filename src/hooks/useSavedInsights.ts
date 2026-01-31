@@ -1,66 +1,73 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "savedInsights:v1";
+
+type Listener = () => void;
+
+const listeners = new Set<Listener>();
+let storageListenerAttached = false;
+
+const emitChange = () => {
+  for (const listener of listeners) listener();
+};
+
+const handleStorageEvent = (e: StorageEvent) => {
+  if (e.key === STORAGE_KEY) {
+    emitChange();
+  }
+};
+
+const subscribe = (listener: Listener) => {
+  listeners.add(listener);
+
+  if (typeof window !== "undefined" && !storageListenerAttached) {
+    window.addEventListener("storage", handleStorageEvent);
+    storageListenerAttached = true;
+  }
+
+  return () => {
+    listeners.delete(listener);
+
+    if (typeof window !== "undefined" && storageListenerAttached && listeners.size === 0) {
+      window.removeEventListener("storage", handleStorageEvent);
+      storageListenerAttached = false;
+    }
+  };
+};
+
+const getSnapshot = () => {
+  if (typeof window === "undefined") return "[]";
+  return localStorage.getItem(STORAGE_KEY) ?? "[]";
+};
+
+const getServerSnapshot = () => "[]";
 
 /**
  * Hook for managing saved insights/reports using localStorage.
  * Provides reactive state and functions to save/unsave reports by ID.
  */
 export function useSavedInsights() {
-  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+  const storedJson = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  // Read from localStorage on mount
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
+  const savedIds = useMemo(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as string[];
-        if (Array.isArray(parsed)) {
-          setSavedIds(new Set(parsed));
-        }
+      const parsed = JSON.parse(storedJson) as unknown;
+      if (Array.isArray(parsed) && parsed.every((id) => typeof id === "string")) {
+        return new Set(parsed);
       }
     } catch (error) {
       console.error("Failed to parse saved insights from localStorage:", error);
-      // Fallback to empty array on parse error
-      setSavedIds(new Set());
     }
-  }, []);
-
-  // Listen for cross-tab sync
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY) {
-        try {
-          if (e.newValue) {
-            const parsed = JSON.parse(e.newValue) as string[];
-            if (Array.isArray(parsed)) {
-              setSavedIds(new Set(parsed));
-            }
-          } else {
-            setSavedIds(new Set());
-          }
-        } catch (error) {
-          console.error("Failed to parse saved insights from storage event:", error);
-        }
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
+    return new Set<string>();
+  }, [storedJson]);
 
   // Write to localStorage
   const writeToStorage = useCallback((ids: Set<string>) => {
     if (typeof window === "undefined") return;
 
     try {
-      const array = Array.from(ids);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(array));
-      setSavedIds(new Set(ids));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(ids)));
+      emitChange();
     } catch (error) {
       console.error("Failed to write saved insights to localStorage:", error);
     }
@@ -118,4 +125,3 @@ export function useSavedInsights() {
     savedCount,
   };
 }
-

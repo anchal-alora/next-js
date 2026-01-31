@@ -66,7 +66,7 @@ const NotFound = () => {
                 Page Not Found
               </h2>
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-                The page you're looking for doesn't exist or has been moved. Let us help you find what you need.
+                The page you’re looking for doesn’t exist or has been moved. Let us help you find what you need.
               </p>
             </div>
 

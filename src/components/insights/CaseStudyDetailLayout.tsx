@@ -145,7 +145,7 @@ export function CaseStudyDetailLayout({
               </div>
               <h2 className="font-display text-2xl md:text-3xl font-semibold">Discuss This Case Study</h2>
               <p className="text-muted-foreground max-w-2xl">
-                Let us know if you'd like to unpack the learnings or apply these insights to your strategic priorities.
+                Let us know if you’d like to unpack the learnings or apply these insights to your strategic priorities.
               </p>
               <Button asChild size="lg" className="gap-2 hover:bg-primary">
                 <Link href={getContactFormLink("case-study-detail-cta")}>

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { NetworkVisualization } from "@/components/NetworkVisualization";
@@ -138,7 +137,26 @@ const engagementProcess = [
 ];
 
 export default function Industries() {
-  const pathname = usePathname();
+  const scrollToIndustry = (event: React.MouseEvent<HTMLAnchorElement>, industryId: string) => {
+    // Allow new-tab / copy-link / etc.
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const target = document.getElementById(industryId);
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Ensure clicking the same hash still scrolls by manually setting the URL.
+    window.history.replaceState(null, "", `#${industryId}`);
+  };
 
   return (
     <Layout>
@@ -161,32 +179,53 @@ export default function Industries() {
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
                 We work across industries where leaders need credible market intelligence and practical strategy. While each sector has its own context, many decision patterns repeat across markets, including competitive pressure, shifting customer expectations, margin constraints, and technology-driven change.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <Link href={getContactFormLink("industries-hero")}>
-                <Button variant="default" size="lg" className="group relative overflow-hidden">
-                  <span className="relative z-10 text-white">Start a Conversation</span>
-                  <ArrowRight className="ml-2 relative z-10" />
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-shimmer"></span>
-                </Button>
-              </Link>
-              <Link href="/insights/explore" >
-                <Button variant="outline" size="lg" className="group relative overflow-hidden">
-                  <span className="relative z-10">Explore Industry Insights</span>
-                  <ArrowUpRight className="ml-2 relative z-10" />
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-                </Button>
-              </Link>
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
+	              <div className="flex flex-col sm:flex-row gap-4 mt-8">
+	              <Link href={getContactFormLink("industries-hero")}>
+	                <Button variant="default" size="lg" className="group relative overflow-hidden">
+	                  <span className="relative z-10 text-white">Start a Conversation</span>
+	                  <ArrowRight className="ml-2 relative z-10" />
+	                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-shimmer"></span>
+	                </Button>
+	              </Link>
+		              <Link href="/insights/explore" >
+		                <Button variant="outline" size="lg" className="group relative overflow-hidden">
+		                  <span className="relative z-10">Explore Industry Insights</span>
+		                  <ArrowUpRight className="ml-2 relative z-10" />
+		                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+		                </Button>
+		              </Link>
+		              </div>
 
-      {/* Industries Detail */}
-      {industries.map((industry, index) => {
-        return (
-        <section
-          key={industry.id}
+		              <div className="mt-8 w-full max-w-lg">
+		                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+		                  {industries.map((industry) => (
+		                    <Link
+		                      key={industry.id}
+		                      href={`#${industry.id}`}
+		                      onClick={(event) => scrollToIndustry(event, industry.id)}
+		                      className="group flex items-center gap-2 rounded-lg border border-slate-200/80 dark:border-slate-700/70 bg-white/50 dark:bg-slate-900/30 px-3 py-2 hover:bg-white/80 dark:hover:bg-slate-800/60 transition-colors"
+		                    >
+		                      <span className="flex h-7 w-7 items-center justify-center rounded-md bg-primary/10 text-primary">
+		                        <industry.icon className="h-3.5 w-3.5" />
+		                      </span>
+		                      <span className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 group-hover:text-primary transition-colors leading-snug">
+		                        {industry.industryKey}
+		                      </span>
+		                    </Link>
+		                  ))}
+		                </div>
+		              </div>
+
+		            </div>
+		          </ScrollReveal>
+		        </div>
+		      </section>
+
+	      {/* Industries Detail */}
+	      {industries.map((industry, index) => {
+	        return (
+	        <section
+	          key={industry.id}
           id={industry.id}
           className={`section-padding scroll-mt-24 ${index % 2 === 0 ? "bg-background" : "bg-secondary"}`}
         >
@@ -332,7 +371,7 @@ export default function Industries() {
         <div className="container-narrow text-center">
           <ScrollReveal direction="up" delay={0}>
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
-              Let's Discuss Your Industry Challenges
+              Let’s Discuss Your Industry Challenges
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               Our industry experts are ready to help you navigate complexity and capture new opportunities.

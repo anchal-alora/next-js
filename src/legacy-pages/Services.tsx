@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import SectionHeader from "@/components/shared/SectionHeader";
@@ -10,6 +9,7 @@ import { ScrollReveal, ScrollRevealStagger } from "@/components/ScrollReveal";
 import { OptimizedPicture } from "@/components/shared/OptimizedPicture";
 import { ArrowRight, ClipboardList, Network, Radar, Target, CheckCircle2, ChevronRight } from "lucide-react";
 import { services } from "@/lib/servicesList";
+import { servicesData } from "@/lib/servicesData";
 import { getContactFormLink } from "@/lib/routes";
 
 const frameworkSteps = [
@@ -55,7 +55,27 @@ const methodologyBoxes = [
 ];
 
 export default function Services() {
-  const pathname = usePathname();
+  const scrollToService = (event: React.MouseEvent<HTMLAnchorElement>, serviceId: string) => {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.shiftKey
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const target = document.getElementById(serviceId);
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Ensure clicking the same hash still scrolls by manually setting the URL.
+    window.history.replaceState(null, "", `#${serviceId}`);
+  };
+
   return (
     <Layout>
       
@@ -80,6 +100,29 @@ export default function Services() {
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
                 Alora Advisory helps leadership teams make confident growth, investment, and positioning decisions using rigorous research, structured analysis, and clear strategic interpretation. Engagements are designed around the decision at hand, so insights are defensible, actionable, and ready for executive use.
               </p>
+
+              <div className="mt-8 w-full max-w-3xl">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  {services.map((service) => {
+                    const label = servicesData.find((item) => item.id === service.id)?.shortTitle ?? service.title;
+                    return (
+                      <Link
+                        key={service.id}
+                        href={`#${service.id}`}
+                        onClick={(event) => scrollToService(event, service.id)}
+                        className="group flex items-center gap-2 rounded-lg border border-slate-200/80 dark:border-slate-700/70 bg-white/50 dark:bg-slate-900/30 px-3 py-2 hover:bg-white/80 dark:hover:bg-slate-800/60 transition-colors"
+                      >
+                        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary">
+                          <service.icon className="h-4 w-4" />
+                        </span>
+                        <span className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 group-hover:text-primary transition-colors leading-snug">
+                          {label}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </ScrollReveal>
         </div>

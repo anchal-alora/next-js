@@ -17,16 +17,16 @@ interface InsightSidebarProps {
 export function InsightSidebar({ report, tocRef, tocKey, showCTA = false }: InsightSidebarProps) {
   const contactLink = getContactFormLink("insight-sidebar-discuss");
   const downloadFormLink = report.contentFormat === "downloadable" ? "#download-form" : "#contact-form";
-  const IndustryIcon = report.industry ? getIndustryIcon(report.industry) : null;
+  const industryIcon = report.industry ? getIndustryIcon(report.industry, { className: "w-4 h-4 text-primary" }) : null;
 
   return (
-    <div className="lg:sticky lg:top-24">
-      <div className="card-elevated p-6 space-y-6">
+    <div className="sticky-sidebar">
+      <div className="card-elevated p-6 flex flex-col gap-6 sticky-sidebar-panel overflow-hidden">
         {(report.industry || report.type) && (
           <div className="flex items-center justify-between gap-4">
-            {report.industry && IndustryIcon && (
+            {report.industry && industryIcon && (
               <div className="flex items-center gap-2 text-sm text-foreground">
-                <IndustryIcon className="w-4 h-4 text-primary" />
+                {industryIcon}
                 <span className="font-medium">{report.industry}</span>
               </div>
             )}
@@ -75,11 +75,10 @@ export function InsightSidebar({ report, tocRef, tocKey, showCTA = false }: Insi
           </>
         )}
 
-        <div className="pt-4 border-t border-border">
+        <div className="pt-4 border-t border-border flex-1 min-h-0 overflow-y-auto pr-2 toc-scroll">
           <OnThisPageToc containerRef={tocRef} contentKey={tocKey} isSticky={false} />
         </div>
       </div>
     </div>
   );
 }
-

@@ -27,8 +27,6 @@ import { normalizeDate } from "./normalize-date.mjs";
 import { writeTextIfChanged } from "./_write.mjs";
 import { resolveInsightImageUrl, resolveInsightReportLink } from "./_assets.mjs";
 
-const INSIGHTS_TIMEZONE = "Asia/Kolkata"; // GMT+05:30
-
 const INSIGHTS_MD_ROOT = path.resolve(process.cwd(), "content/insights-md");
 const REPORTS_JSON_PATH = path.resolve(process.cwd(), "reports-link.json");
 

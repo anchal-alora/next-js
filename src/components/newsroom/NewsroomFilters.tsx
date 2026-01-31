@@ -1,11 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Filter, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { getIndustryConfig, getIndustryShortLabel } from "@/lib/industryConfig";
-import type { NewsroomArticle } from "@/lib/newsroomTypes";
+import { Search, ListFilter, X } from "lucide-react";
 import { useQueryParams } from "@/hooks/useQueryParams";
+import { useMemo, useState } from "react";
+import type { NewsroomArticle } from "@/lib/newsroomTypes";
+import { SearchCombobox } from "@/components/search/SearchCombobox";
+import { getIndustryShortLabel } from "@/lib/industryConfig";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface NewsroomFiltersProps {
   articles: NewsroomArticle[];
@@ -14,108 +15,163 @@ interface NewsroomFiltersProps {
 export function NewsroomFilters({ articles }: NewsroomFiltersProps) {
   const { searchParams, setSearchParams } = useQueryParams();
 
-  const industries = Array.from(
-    new Set(
-      articles
-        .map((article) => article.industry)
-        .filter(Boolean)
-        .map((industry) => getIndustryShortLabel(industry))
+  const industries = useMemo(() => {
+    return Array.from(
+      new Set(
+        articles
+          .map((article) => article.industry)
+          .filter(Boolean)
+          .map((industry) => getIndustryShortLabel(industry)),
+      ),
     )
-  ).sort();
+      .filter(Boolean)
+      .sort();
+  }, [articles]);
 
+  const keywordParams = searchParams.getAll("kw").map((k) => k.trim()).filter(Boolean);
+  const legacySearch = (searchParams.get("search") ?? "").trim();
+  const effectiveKeywords = keywordParams.length > 0 ? keywordParams : legacySearch ? [legacySearch] : [];
+
+  const [searchValue, setSearchValue] = useState("");
   const selectedIndustries = searchParams.getAll("industry");
-  const hasAnyFilters = selectedIndustries.length > 0;
 
-  const handleFilterToggle = (industry: string) => {
-    const newParams = new URLSearchParams(searchParams);
-    const currentValues = newParams.getAll("industry");
-    const isSelected = currentValues.includes(industry);
+  const hasAnyFilters = Boolean(searchParams.get("industry")) || effectiveKeywords.length > 0;
 
-    if (isSelected) {
-      const filtered = currentValues.filter((v) => v !== industry);
-      newParams.delete("industry");
-      filtered.forEach((v) => newParams.append("industry", v));
-    } else {
-      newParams.append("industry", industry);
-    }
-
-    newParams.delete("page");
-    setSearchParams(newParams);
+  const handleIndustryChange = (value: string) => {
+    const next = new URLSearchParams(searchParams);
+    next.delete("industry");
+    if (value && value !== "__all__") next.set("industry", value);
+    next.delete("page");
+    setSearchParams(next);
   };
 
-  const handleClearIndustry = () => {
-    const newParams = new URLSearchParams(searchParams);
-    newParams.delete("industry");
-    newParams.delete("page");
-    setSearchParams(newParams);
+  const normalizeForCompare = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/,/g, "")
+      .replace(/['’]/g, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+
+  const handleAddKeyword = (raw: string) => {
+    const keyword = raw.trim();
+    if (!keyword) return;
+    const normalized = normalizeForCompare(keyword);
+    if (!normalized) return;
+
+    const existing = effectiveKeywords.some((k) => normalizeForCompare(k) === normalized);
+    if (existing) {
+      setSearchValue("");
+      return;
+    }
+
+    const next = new URLSearchParams(searchParams);
+    next.delete("search"); // migrate off legacy
+    next.append("kw", keyword);
+    next.delete("page");
+    setSearchParams(next, { replace: true });
+    setSearchValue("");
+  };
+
+  const handleRemoveKeyword = (raw: string) => {
+    const normalized = normalizeForCompare(raw);
+    const remaining = effectiveKeywords.filter((k) => normalizeForCompare(k) !== normalized);
+    const next = new URLSearchParams(searchParams);
+    next.delete("search");
+    next.delete("kw");
+    for (const k of remaining) next.append("kw", k);
+    next.delete("page");
+    setSearchParams(next, { replace: true });
   };
 
   const handleClearAll = () => {
     const newParams = new URLSearchParams(searchParams);
     newParams.delete("industry");
     newParams.delete("search");
+    newParams.delete("kw");
     newParams.delete("sort");
     newParams.delete("page");
     setSearchParams(newParams);
   };
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-6 mb-8">
-      <div className="space-y-6">
-        <div className="space-y-3">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <Filter className="w-4 h-4 text-primary" />
-              Industry
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleClearAll}
-              disabled={!hasAnyFilters}
-              className="gap-2"
-            >
-              <X className="w-4 h-4" />
-              Clear all
-            </Button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={handleClearIndustry}
-              className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border flex items-center gap-2",
-                selectedIndustries.length === 0
-                  ? "bg-primary text-primary-foreground border-primary shadow-md"
-                  : "bg-card text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
-              )}
-            >
-              All Industries
-            </button>
-            {industries.map((industry) => {
-              const normalizedSelected = selectedIndustries.map((ind) => getIndustryShortLabel(ind));
-              const isSelected = normalizedSelected.includes(industry);
-              const config = getIndustryConfig(industry);
-              const IndustryIcon = config.icon;
-              return (
-                <button
-                  key={industry}
-                  onClick={() => handleFilterToggle(industry)}
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border flex items-center gap-2",
-                    isSelected
-                      ? "bg-primary text-primary-foreground border-primary shadow-md"
-                      : "bg-card text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
-                  )}
-                >
-                  <IndustryIcon className="w-4 h-4" />
-                  {industry}
-                </button>
-              );
-            })}
-          </div>
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+	        <div className="lg:col-span-7">
+	          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+	            Search
+	          </label>
+	          <SearchCombobox
+	            scope="newsroom"
+	            value={searchValue}
+	            onValueChange={setSearchValue}
+	            placeholder="Search releases..."
+	            metaVariant="newsroom"
+	            containerClassName="relative"
+	            inputWrapperClassName="relative"
+	            onSubmit={handleAddKeyword}
+	            leading={
+	              <Search
+	                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5"
+	                aria-hidden="true"
+              />
+            }
+            inputClassName="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-900 focus:outline-none focus:ring-0 focus:border-slate-200 dark:focus:border-slate-700"
+          />
         </div>
-      </div>
+
+        <div className="lg:col-span-3">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+            Industry
+          </label>
+          <Select value={selectedIndustries[0] ?? "__all__"} onValueChange={handleIndustryChange}>
+            <SelectTrigger className="h-12">
+              <SelectValue placeholder="Select industry..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all__">All Industries</SelectItem>
+              {industries.map((industry) => (
+                <SelectItem key={industry} value={industry}>
+                  {industry}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="lg:col-span-2 flex justify-end">
+          <button
+            type="button"
+            disabled={!hasAnyFilters}
+            className="flex items-center gap-2 text-sm text-slate-500 hover:text-primary py-3 disabled:opacity-40 disabled:hover:text-slate-500"
+            onClick={handleClearAll}
+          >
+            <ListFilter className="h-5 w-5" aria-hidden="true" />
+            Clear Filters
+          </button>
+	        </div>
+	      </div>
+
+      {effectiveKeywords.length > 0 ? (
+        <div className="mt-6 flex flex-wrap gap-2">
+          {effectiveKeywords.map((kw) => (
+            <span
+              key={`kw:${kw}`}
+              className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium flex items-center gap-2"
+            >
+              {kw}
+              <button
+                type="button"
+                aria-label={`Remove ${kw}`}
+                onClick={() => handleRemoveKeyword(kw)}
+                className="text-primary hover:opacity-80"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </span>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

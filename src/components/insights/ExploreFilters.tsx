@@ -1,12 +1,19 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Filter, Bookmark, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useMemo, useState } from "react";
+import { Bookmark, ListFilter, X } from "lucide-react";
 import type { Report } from "@/lib/reportUtils";
-import { getIndustryConfig, getIndustryShortLabel } from "@/lib/industryConfig";
+import { getIndustryShortLabel } from "@/lib/industryConfig";
 import { useSavedInsights } from "@/hooks/useSavedInsights";
 import { useQueryParams } from "@/hooks/useQueryParams";
+import { InsightsKeywordCombobox } from "@/components/insights/InsightsKeywordCombobox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ExploreFiltersProps {
   reports: Report[];
@@ -16,140 +23,253 @@ export function ExploreFilters({ reports }: ExploreFiltersProps) {
   const { searchParams, setSearchParams } = useQueryParams();
   const { savedCount } = useSavedInsights();
 
-  const industries = Array.from(
-    new Set(
-      reports
-        .map((report) => report.industry)
-        .filter(Boolean)
-        .map((industry) => getIndustryShortLabel(industry))
-    )
-  ).sort();
+  const industries = useMemo(() => {
+    return Array.from(
+      new Set(
+        reports
+          .map((report) => report.industry)
+          .filter(Boolean)
+          .map((industry) => getIndustryShortLabel(industry)),
+      ),
+    ).sort();
+  }, [reports]);
+
+  const contentTypes = useMemo(() => {
+    return Array.from(new Set(reports.map((r) => r.type).filter(Boolean))).sort();
+  }, [reports]);
+
+  const keywordParams = searchParams.getAll("kw").map((k) => k.trim()).filter(Boolean);
+  const [keywordDraft, setKeywordDraft] = useState("");
 
   const selectedIndustries = searchParams.getAll("industry");
+  const selectedTypes = searchParams.getAll("type");
   const savedOnly = searchParams.get("saved") === "1";
-  const hasAnyFilters = selectedIndustries.length > 0 || savedOnly;
+  const hasAnyFilters =
+    keywordParams.length > 0 ||
+    selectedIndustries.length > 0 ||
+    selectedTypes.length > 0 ||
+    savedOnly;
 
-  const handleFilterToggle = (value: string) => {
-    const newParams = new URLSearchParams(searchParams);
-    const currentValues = newParams.getAll("industry");
-    const isSelected = currentValues.includes(value);
-
-    if (isSelected) {
-      const filtered = currentValues.filter((v) => v !== value);
-      newParams.delete("industry");
-      filtered.forEach((v) => newParams.append("industry", v));
-    } else {
-      newParams.append("industry", value);
-    }
-
-    newParams.delete("page");
-    setSearchParams(newParams);
+  const handleIndustryChange = (value: string) => {
+    const next = new URLSearchParams(searchParams);
+    next.delete("industry");
+    if (value && value !== "__all__") next.append("industry", value);
+    next.delete("page");
+    setSearchParams(next);
   };
 
-  const handleClearIndustry = () => {
-    const newParams = new URLSearchParams(searchParams);
-    newParams.delete("industry");
-    newParams.delete("page");
-    setSearchParams(newParams);
+  const handleTypeChange = (value: string) => {
+    const next = new URLSearchParams(searchParams);
+    next.delete("type");
+    if (value && value !== "__all__") next.append("type", value);
+    next.delete("page");
+    setSearchParams(next);
   };
 
   const handleToggleSaved = () => {
-    const newParams = new URLSearchParams(searchParams);
-    if (savedOnly) {
-      newParams.delete("saved");
-    } else {
-      newParams.set("saved", "1");
-    }
-    newParams.delete("page");
-    setSearchParams(newParams);
+    const next = new URLSearchParams(searchParams);
+    if (savedOnly) next.delete("saved");
+    else next.set("saved", "1");
+    next.delete("page");
+    setSearchParams(next);
   };
 
   const handleClearAll = () => {
-    const newParams = new URLSearchParams(searchParams);
-    newParams.delete("industry");
-    newParams.delete("saved");
-    newParams.delete("page");
-    setSearchParams(newParams);
+    const next = new URLSearchParams(searchParams);
+    next.delete("q");
+    next.delete("kw");
+    next.delete("industry");
+    next.delete("type");
+    next.delete("saved");
+    next.delete("page");
+    setSearchParams(next);
+  };
+
+  const normalizeForCompare = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/,/g, "")
+      .replace(/['’]/g, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+
+  const handleAddKeyword = (raw: string) => {
+    const nextKeyword = raw.trim();
+    if (!nextKeyword) return;
+
+    const normalized = normalizeForCompare(nextKeyword);
+    if (!normalized) return;
+
+    const existing = keywordParams.some((k) => normalizeForCompare(k) === normalized);
+    if (existing) {
+      setKeywordDraft("");
+      return;
+    }
+
+    const next = new URLSearchParams(searchParams);
+    next.append("kw", nextKeyword);
+    next.delete("page");
+    setSearchParams(next, { replace: true });
+    setKeywordDraft("");
+  };
+
+  const handleRemoveKeyword = (raw: string) => {
+    const normalized = normalizeForCompare(raw);
+    const remaining = keywordParams.filter((k) => normalizeForCompare(k) !== normalized);
+    const next = new URLSearchParams(searchParams);
+    next.delete("kw");
+    for (const k of remaining) next.append("kw", k);
+    next.delete("page");
+    setSearchParams(next, { replace: true });
   };
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-6 mb-8">
-      <div className="space-y-6">
-        <div className="space-y-3">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <Filter className="w-4 h-4 text-primary" />
-              Industry
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleClearAll}
-              disabled={!hasAnyFilters}
-              className="gap-2"
-            >
-              <X className="w-4 h-4" />
-              Clear all
-            </Button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={handleClearIndustry}
-              className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border flex items-center gap-2",
-                selectedIndustries.length === 0
-                  ? "bg-primary text-primary-foreground border-primary shadow-md"
-                  : "bg-card text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
-              )}
-            >
-              All Industries
-            </button>
-            {industries.map((industry) => {
-              const normalizedSelected = selectedIndustries.map((ind) => getIndustryShortLabel(ind));
-              const isSelected = normalizedSelected.includes(industry);
-              const config = getIndustryConfig(industry);
-              const IndustryIcon = config.icon;
-              return (
-                <button
-                  key={industry}
-                  onClick={() => handleFilterToggle(industry)}
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border flex items-center gap-2",
-                    isSelected
-                      ? "bg-primary text-primary-foreground border-primary shadow-md"
-                      : "bg-card text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
-                  )}
-                >
-                  <IndustryIcon className="w-4 h-4" />
-                  {industry}
-                </button>
-              );
-            })}
-          </div>
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+        <div className="lg:col-span-4">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+            Search
+          </label>
+          <InsightsKeywordCombobox
+            value={keywordDraft}
+            onValueChange={setKeywordDraft}
+            onSubmitValue={handleAddKeyword}
+            placeholder="Search topics, keywords..."
+            inputClassName="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-900 focus:ring-2 focus:ring-primary focus:border-transparent"
+          />
         </div>
 
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-            <Filter className="w-4 h-4 text-primary" />
-            Saved
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={handleToggleSaved}
-              className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border flex items-center gap-2",
-                savedOnly
-                  ? "bg-primary text-primary-foreground border-primary shadow-md"
-                  : "bg-card text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
-              )}
-            >
-              <Bookmark className="w-4 h-4" />
-              Saved only {savedCount > 0 && `(${savedCount})`}
-            </button>
-          </div>
+        <div className="lg:col-span-3">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+            Industry
+          </label>
+          <Select
+            value={selectedIndustries[0] ?? "__all__"}
+            onValueChange={(value) => handleIndustryChange(value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select industry..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all__">All Industries</SelectItem>
+              {industries.map((industry) => (
+                <SelectItem key={industry} value={industry}>
+                  {industry}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="lg:col-span-3">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+            Content Type
+          </label>
+          <Select value={selectedTypes[0] ?? "__all__"} onValueChange={(value) => handleTypeChange(value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select type..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all__">All Types</SelectItem>
+              {contentTypes.map((t) => (
+                <SelectItem key={t} value={t}>
+                  {t}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="lg:col-span-2 flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={handleToggleSaved}
+            className="flex items-center gap-2 text-sm text-slate-500 hover:text-primary py-3"
+          >
+            <Bookmark className="h-4 w-4" aria-hidden="true" />
+            Saved{savedCount > 0 ? ` (${savedCount})` : ""}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleClearAll}
+            disabled={!hasAnyFilters}
+            className="flex items-center gap-2 text-sm text-slate-500 hover:text-primary py-3 disabled:opacity-40 disabled:hover:text-slate-500"
+          >
+            <ListFilter className="h-5 w-5" aria-hidden="true" />
+            Clear Filters
+          </button>
         </div>
       </div>
+
+      {(keywordParams.length > 0 || selectedIndustries.length > 0 || selectedTypes.length > 0 || savedOnly) ? (
+        <div className="mt-6 flex flex-wrap gap-2">
+          {keywordParams.map((kw) => (
+            <span
+              key={`kw:${kw}`}
+              className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium flex items-center gap-2"
+            >
+              {kw}
+              <button
+                type="button"
+                aria-label={`Remove ${kw}`}
+                onClick={() => handleRemoveKeyword(kw)}
+                className="text-primary hover:opacity-80"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </span>
+          ))}
+
+          {selectedIndustries.map((industry) => (
+            <span
+              key={`industry:${industry}`}
+              className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium flex items-center gap-2"
+            >
+              {industry}
+              <button
+                type="button"
+                aria-label={`Remove ${industry}`}
+                onClick={() => handleIndustryChange("__all__")}
+                className="text-primary hover:opacity-80"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </span>
+          ))}
+
+          {selectedTypes.map((t) => (
+            <span
+              key={`type:${t}`}
+              className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium flex items-center gap-2"
+            >
+              {t}
+              <button
+                type="button"
+                aria-label={`Remove ${t}`}
+                onClick={() => handleTypeChange("__all__")}
+                className="text-primary hover:opacity-80"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </span>
+          ))}
+
+          {savedOnly ? (
+            <span className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium flex items-center gap-2">
+              Saved
+              <button
+                type="button"
+                aria-label="Remove saved filter"
+                onClick={handleToggleSaved}
+                className="text-primary hover:opacity-80"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </span>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

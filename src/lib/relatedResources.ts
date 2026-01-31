@@ -1,5 +1,4 @@
 import type { NewsroomArticle } from "@/lib/newsroomTypes";
-import type { PressRelease } from "@/lib/newsroomTypes"; // Backward compatibility
 
 export const INDUSTRY_MATCH_SCORE = 100;
 export const TAG_MATCH_SCORE = 10;

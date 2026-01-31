@@ -1,15 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import type { ComponentType } from "react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import SectionHeader from "@/components/shared/SectionHeader";
-import { IconBadge } from "@/components/infographics";
 import { ScrollReveal, ScrollRevealStagger } from "@/components/ScrollReveal";
 import { OptimizedPicture } from "@/components/shared/OptimizedPicture";
-import { ArrowRight, ArrowUpRight, Target, Users, Heart, Award, Lightbulb, CheckCircle2, Sparkles, FileCheck, Shield, Eye, Rocket, Crosshair, BookOpen, ListOrdered, Presentation, Clock } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Target, Users, Lightbulb, Shield, Eye, Rocket, Crosshair, BookOpen, ListOrdered, Presentation, Clock } from "lucide-react";
 import { getContactFormLink } from "@/lib/routes";
 
 const differentiators = [
@@ -32,29 +30,6 @@ const differentiators = [
     icon: Clock,
     title: "Long-Term Thinking",
     description: "We look beyond short-term trends to identify structural shifts and their implications. Our goal is to support decisions that remain sound over time.",
-  },
-];
-
-const values = [
-  {
-    icon: Target,
-    title: "Excellence",
-    description: "We pursue the highest standards in everything we do, delivering exceptional value to our clients.",
-  },
-  {
-    icon: Users,
-    title: "Collaboration",
-    description: "We work as true partners with our clients, building lasting relationships based on trust and mutual respect.",
-  },
-  {
-    icon: Heart,
-    title: "Integrity",
-    description: "We act with honesty and transparency, always putting our clients' interests first.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Innovation",
-    description: "We embrace new ideas and approaches, continuously evolving to meet emerging challenges.",
   },
 ];
 
@@ -130,8 +105,7 @@ const journeyNodes: Array<{
   },
 ];
 
-export default function WhoWeAre() {
-  const pathname = usePathname();
+export default function About() {
   // Slight horizontal stretch so the orbit reads wider (ellipse instead of perfect circle)
   const ORBIT_STRETCH_X = 1.15;
 
@@ -374,13 +348,13 @@ export default function WhoWeAre() {
         <div className="container-narrow text-center">
           <ScrollReveal direction="up" delay={0}>
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
-              Let's Build Clarity Together
+              Let’s Build Clarity Together
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              If you're navigating a market decision and need credible insight and strategic direction, we'd be happy to explore how Alora Advisory can help.
+              If you’re navigating a market decision and need credible insight and strategic direction, we’d be happy to explore how Alora Advisory can help.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href={getContactFormLink("who-we-are-cta")}>
+            <Link href={getContactFormLink("about-cta")}>
               <Button variant="default" size="lg" className="group relative overflow-hidden w-full sm:w-auto">
                 <span className="relative z-10 text-white">Start a Conversation</span>
                 <ArrowRight className="ml-2 relative z-10" />

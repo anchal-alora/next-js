@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -14,7 +13,6 @@ import {
 } from "@/components/ui/carousel";
 import Layout from "@/components/layout/Layout";
 import SectionHeader from "@/components/shared/SectionHeader";
-import StatCard from "@/components/shared/StatCard";
 import { OptimizedPicture } from "@/components/shared/OptimizedPicture";
 import { ScrollReveal, ScrollRevealStagger } from "@/components/ScrollReveal";
 import { ArrowRight, ChevronRight, Search, Briefcase, AlertCircle } from "lucide-react";
@@ -161,7 +159,6 @@ const partners = [
 ];
 
 export default function Index() {
-  const pathname = usePathname();
   const [testimonialApi, setTestimonialApi] = useState<CarouselApi>();
   const [testimonialCount, setTestimonialCount] = useState(0);
   const [testimonialCurrent, setTestimonialCurrent] = useState(0);
@@ -415,7 +412,7 @@ export default function Index() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <ScrollReveal direction="right" delay={0} className="order-2 lg:order-1">
               <span className="inline-block text-accent font-semibold text-sm uppercase tracking-widest mb-4">
-                Who We Are
+                About
               </span>
               <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-6 leading-tight">
                 Research Led Advisory
@@ -432,7 +429,7 @@ export default function Index() {
               <p className="text-muted-foreground mb-8 leading-relaxed">
                 By separating meaningful market signals from noise, we translate analysis into clear strategic direction for leadership teams.
               </p>
-              <Link href="/who-we-are">
+              <Link href="/about">
                 <Button variant="default" size="lg" className="group relative overflow-hidden">
                   <span className="relative z-10 text-white">Discover Our Story</span>
                   <ArrowRight className="ml-2 relative z-10" />
@@ -831,7 +828,7 @@ export default function Index() {
         <div className="container-narrow text-center">
           <ScrollReveal direction="up" delay={0}>
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-6">
-              Let's Discuss Your Market Challenge
+              Let’s Discuss Your Market Challenge
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               If you are evaluating an opportunity or making a strategic decision that requires credible evidence, we can help. Share your context, and Alora Advisory will provide an initial perspective and suggested next steps.

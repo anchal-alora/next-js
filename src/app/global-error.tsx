@@ -6,12 +6,15 @@
  * Must include its own <html> and <body> tags.
  */
 export default function GlobalError({
-  error,
+  error: _error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  if (process.env.NODE_ENV !== "production") {
+    console.error(_error);
+  }
   return (
     <html lang="en">
       <body className="min-h-screen flex items-center justify-center bg-white px-4">
