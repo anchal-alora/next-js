@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Layout from "@/components/layout/Layout";
 import { SITE_URL } from "@/lib/seo";
 import { SearchPageClient } from "./SearchPageClient";
@@ -18,8 +19,9 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <Layout>
-      <SearchPageClient />
+      <Suspense fallback={<div className="min-h-screen" />}>
+        <SearchPageClient />
+      </Suspense>
     </Layout>
   );
 }
-
