@@ -170,43 +170,44 @@ export default function Explore() {
               competitive dynamics, and their implications across industries.
             </p>
 
-	            <form
-	              onSubmit={(event) => {
-	                event.preventDefault();
-	                const next = new URLSearchParams(searchParams);
-	                const q = searchText.trim();
+		            <form
+		              onSubmit={(event) => {
+		                event.preventDefault();
+		                const next = new URLSearchParams(searchParams);
+		                const q = searchText.trim();
 
 	                if (q) next.set("q", q);
 	                else next.delete("q");
 
 	                next.delete("page");
-	                setSearchParams(next);
-	                scrollResultsToTop();
-	              }}
-	              className="mt-10 max-w-3xl"
-	            >
+		                setSearchParams(next);
+		                scrollResultsToTop();
+		              }}
+		              className="mt-10 max-w-2xl"
+		            >
 	              <div className="relative group">
 	                <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-	                <SearchCombobox
-	                  scope="insights"
-	                  value={searchText}
-	                  onValueChange={setSearchText}
-	                  placeholder="Search our insights, reports and analysis..."
-	                  portalDropdown
-	                  metaVariant="insights"
-	                  containerClassName="relative"
-	                  inputWrapperClassName="relative bg-white/95 dark:bg-slate-800/90 rounded-full shadow-2xl p-2 flex items-center"
-	                  leading={<Search className="text-slate-400 ml-6 mr-3 h-5 w-5" aria-hidden="true" />}
-	                  inputClassName="w-full bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:border-0 focus-visible:border-0 text-slate-900 dark:text-white placeholder-slate-400 py-4"
-	                  trailing={
-	                    <button
-	                      type="submit"
-	                      className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-full font-semibold transition-all shadow-lg mr-1"
-	                    >
-	                      Search
-	                    </button>
-	                  }
-	                />
+		                <SearchCombobox
+		                  scope="insights"
+		                  value={searchText}
+		                  onValueChange={setSearchText}
+		                  placeholder="Search our insights, reports and analysis..."
+		                  portalDropdown
+		                  metaVariant="insights"
+		                  containerClassName="relative"
+		                  inputBorderClassName="relative rounded-2xl p-[2px] bg-gradient-to-r from-[#281C2D] via-[#7F33CC] to-[#281C2D] shadow-[0_18px_55px_rgba(0,0,0,0.35),0_0_28px_rgba(127,51,204,0.35)] before:content-[''] before:absolute before:inset-0 before:rounded-2xl before:bg-[radial-gradient(70%_120%_at_10%_0%,rgba(255,255,255,0.45)_0%,rgba(255,255,255,0)_60%)] before:pointer-events-none"
+		                  inputWrapperClassName="relative bg-white/95 dark:bg-slate-800/90 rounded-2xl shadow-elegant-sm px-4 py-3 flex items-center"
+		                  leading={<Search className="text-slate-400 ml-4 mr-3 h-5 w-5" aria-hidden="true" />}
+		                  inputClassName="w-full bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:border-0 focus-visible:border-0 text-slate-900 dark:text-white placeholder-slate-400 py-3"
+		                  trailing={
+		                    <button
+		                      type="submit"
+		                      className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg mr-1"
+		                    >
+		                      Search
+		                    </button>
+		                  }
+		                />
 	              </div>
 	            </form>
           </div>

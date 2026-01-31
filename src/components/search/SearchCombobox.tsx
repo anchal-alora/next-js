@@ -20,6 +20,8 @@ type SearchComboboxProps = {
   debounceMs?: number;
   showDropdown?: boolean;
   portalDropdown?: boolean;
+  dropdownInsetPx?: number;
+  inputBorderClassName?: string;
   metaVariant?: "type" | "insights" | "newsroom";
   inputClassName?: string;
   inputWrapperClassName?: string;
@@ -84,6 +86,8 @@ export function SearchCombobox({
   debounceMs = LIVE_SEARCH_DEBOUNCE_MS,
   showDropdown = true,
   portalDropdown = false,
+  dropdownInsetPx = 0,
+  inputBorderClassName,
   metaVariant = "type",
   inputClassName,
   inputWrapperClassName,
@@ -169,6 +173,17 @@ export function SearchCombobox({
 
   useEffect(() => {
     if (!isOpen) return;
+    const onScroll = (event: Event) => {
+      const target = event.target as Node | null;
+      if (target && dropdownRef.current?.contains(target)) return;
+      setIsOpen(false);
+    };
+    window.addEventListener("scroll", onScroll, true);
+    return () => window.removeEventListener("scroll", onScroll, true);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
     const form = rootRef.current?.closest("form");
     if (!form) return;
 
@@ -186,10 +201,11 @@ export function SearchCombobox({
     const update = () => {
       const inputRect = internalInputRef.current?.getBoundingClientRect();
       const rootRect = rootRef.current?.getBoundingClientRect();
-      if (!inputRect && !rootRect) return;
-      const left = inputRect?.left ?? rootRect?.left ?? 0;
-      const top = (inputRect?.bottom ?? rootRect?.bottom ?? 0) + 8;
-      const width = rootRect?.width ?? inputRect?.width ?? 0;
+      const inset = Math.max(0, dropdownInsetPx);
+      if (!rootRect) return;
+      const left = rootRect.left + inset;
+      const top = (inputRect?.bottom ?? rootRect.bottom) + 8;
+      const width = Math.max(0, rootRect.width - inset * 2);
       setPortalStyle({
         position: "fixed",
         left,
@@ -207,10 +223,11 @@ export function SearchCombobox({
       window.removeEventListener("resize", update);
       window.removeEventListener("scroll", update, true);
     };
-  }, [isOpen, portalDropdown]);
+  }, [dropdownInsetPx, isOpen, portalDropdown]);
 
   const fallbackSuggestions = useMemo(() => getSearchSuggestions(scope).slice(0, limit), [limit, scope]);
-  const showFallbackSuggestions = mode !== "full" && results.length === 0;
+  // Avoid showing placeholder content for the initial suggest state; wait for the API response.
+  const showFallbackSuggestions = mode === "prefix" && results.length === 0;
 
   const handleSubmit = () => {
     onSubmit?.(value);
@@ -313,13 +330,9 @@ export function SearchCombobox({
         </ul>
       ) : null}
 
-      {!isLoading && results.length === 0 ? (
+      {!isLoading && results.length === 0 && mode !== "suggest" ? (
         <div className="px-4 py-3 text-sm text-slate-500">
-          {mode === "suggest"
-            ? "Popular links"
-            : mode === "prefix"
-              ? `Keep typing (${minChars}+ characters) for full results.`
-              : "No results found."}
+          {mode === "prefix" ? `Keep typing (${minChars}+ characters) for full results.` : "No results found."}
         </div>
       ) : null}
 
@@ -374,29 +387,31 @@ export function SearchCombobox({
 
   return (
     <div ref={rootRef} className={containerClassName ?? "relative w-full"}>
-      <div className={inputWrapperClassName}>
-        {leading}
-        <input
-          ref={mergeRefs(internalInputRef, inputRef)}
-          className={inputClassName}
-          value={value}
-          placeholder={placeholder}
-          onFocus={() => setIsOpen(true)}
-          onChange={(e) => onValueChange(e.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Escape") {
+      <div className={inputBorderClassName}>
+        <div className={inputWrapperClassName}>
+          {leading}
+          <input
+            ref={mergeRefs(internalInputRef, inputRef)}
+            className={inputClassName}
+            value={value}
+            placeholder={placeholder}
+            onFocus={() => setIsOpen(true)}
+            onChange={(e) => onValueChange(e.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") {
+                setIsOpen(false);
+                return;
+              }
+              if (event.key !== "Enter") return;
+              if (onSubmit) {
+                event.preventDefault();
+                handleSubmit();
+              }
               setIsOpen(false);
-              return;
-            }
-            if (event.key !== "Enter") return;
-            if (onSubmit) {
-              event.preventDefault();
-              handleSubmit();
-            }
-            setIsOpen(false);
-          }}
-        />
-        {trailing}
+            }}
+          />
+          {trailing}
+        </div>
       </div>
 
       {isOpen && showDropdown ? (
@@ -405,7 +420,16 @@ export function SearchCombobox({
             createPortal(dropdown, document.body)
           ) : null
         ) : (
-          <div className="absolute z-50 mt-2 w-full">{dropdown}</div>
+          <div
+            className="absolute z-50 mt-2"
+            style={{
+              left: dropdownInsetPx ? `${dropdownInsetPx}px` : undefined,
+              right: dropdownInsetPx ? `${dropdownInsetPx}px` : undefined,
+              width: dropdownInsetPx ? undefined : "100%",
+            }}
+          >
+            {dropdown}
+          </div>
         )
       ) : null}
     </div>
