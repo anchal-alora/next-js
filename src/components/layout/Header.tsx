@@ -208,8 +208,8 @@ export default function Header() {
 
           <div className="navbar-sticky-bg"></div>
 
-          <div className="navbar-container">
-            <div className="grid-norm navbar-header container-wide lg:max-w-[1251px] flex items-center justify-between lg:justify-start gap-4 lg:gap-10 h-20">
+	          <div className="navbar-container">
+	            <div className="grid-norm navbar-header container-wide lg:max-w-[1251px] flex items-center justify-between gap-4 h-20 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-10">
               <div
                 id="global-navbar"
                 className="dropdown dropdown-accordion global-toggler relative lg:hidden"
@@ -273,11 +273,11 @@ export default function Header() {
                 </ul>
               </div>
 
-              <div className="gartner-logo">
-                <Link
-                  href="/"
-                  className="flex items-center gap-3 group"
-                  aria-label="Home"
+	              <div className="gartner-logo lg:justify-self-start">
+	                <Link
+	                  href="/"
+	                  className="flex items-center gap-3 group"
+	                  aria-label="Home"
                   onClick={() => {
                     trackClick("Logo", "link", { click_url: "/" });
                   }}
@@ -289,38 +289,40 @@ export default function Header() {
                     sizes="240px"
                     loading="eager"
                   />
-                </Link>
-              </div>
+	                </Link>
+	              </div>
 
-              <ul id="primarynav" className="nav navbar-nav nav-left central-menu hidden lg:flex items-center gap-1 lg:ml-10">
-                {primaryNavLinks.map((link) => (
-                  <li key={link.path} className="dropdown primary-dropdown">
-                    <Button
-                      asChild
-                      variant="ghost-nav"
-                      className={`text-sm font-medium ${
-                        pathname === link.path ? "text-foreground [&>span]:after:scale-x-100" : ""
-                      }`}
-                    >
-                      <Link
-                        href={link.path}
-                        className="dropdown-toggle nav-link primary-link"
-                        onClick={() => {
-                          trackClick(`${link.name} Navigation`, "link", { click_url: link.path });
-                        }}
-                      >
-                        <span>{link.name}</span>
-                      </Link>
-                    </Button>
-                  </li>
-                ))}
-              </ul>
+	              <nav aria-label="Primary" className="hidden lg:flex justify-center">
+	                <ul id="primarynav" className="nav navbar-nav central-menu flex items-center justify-center gap-1">
+	                  {primaryNavLinks.map((link) => (
+	                    <li key={link.path} className="dropdown primary-dropdown">
+	                      <Button
+	                        asChild
+	                        variant="ghost-nav"
+	                        className={`text-sm font-medium ${
+	                          pathname === link.path ? "text-foreground [&>span]:after:scale-x-100" : ""
+	                        }`}
+	                      >
+	                        <Link
+	                          href={link.path}
+	                          className="dropdown-toggle nav-link primary-link"
+	                          onClick={() => {
+	                            trackClick(`${link.name} Navigation`, "link", { click_url: link.path });
+	                          }}
+	                        >
+	                          <span>{link.name}</span>
+	                        </Link>
+	                      </Button>
+	                    </li>
+	                  ))}
+	                </ul>
+	              </nav>
 
-              <ul className="nav navbar-nav nav-right hidden lg:flex items-center gap-3 lg:ml-auto">
-                <li className="bac-btn-container">
-                  <Link
-                    href={getContactFormLink("header-button")}
-                    onClick={() => {
+	              <ul className="nav navbar-nav nav-right hidden lg:flex items-center gap-3 lg:justify-self-end">
+	                <li className="bac-btn-container">
+	                  <Link
+	                    href={getContactFormLink("header-button")}
+	                    onClick={() => {
                       trackClick("Get in Touch Button (Header)", "button", {
                         click_url: getContactFormLink("header-button"),
                       });
@@ -357,8 +359,9 @@ export default function Header() {
 	                      inputClassName="form-control searchString ac_input w-full h-10 pl-0 pr-12 text-xl bg-transparent border-0 border-b-2 border-primary focus:ring-0 focus:outline-none text-foreground placeholder:text-primary/60"
 	                      onSubmit={(raw) => {
 	                        const q = raw.trim();
+	                        if (!q) return;
 	                        trackClick("Header Search Submit", "other", { search_query: q });
-	                        router.push(q ? `/search?q=${encodeURIComponent(q)}` : "/search");
+	                        router.push(`/search?q=${encodeURIComponent(q)}`);
 	                        setIsSearchOpen(false);
 	                      }}
 	                      onResultSelect={(result) => {
@@ -387,12 +390,14 @@ export default function Header() {
 	                      trailing={
 	                        <button
 	                          type="button"
-	                          className="searchHead btn absolute right-0 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center"
+	                          disabled={!searchValue.trim()}
+	                          className="searchHead btn absolute right-0 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
 	                          aria-label="Search"
 	                          onClick={() => {
 	                            const q = searchValue.trim();
+	                            if (!q) return;
 	                            trackClick("Header Search Submit", "other", { search_query: q });
-	                            router.push(q ? `/search?q=${encodeURIComponent(q)}` : "/search");
+	                            router.push(`/search?q=${encodeURIComponent(q)}`);
 	                            setIsSearchOpen(false);
 	                          }}
 	                        >

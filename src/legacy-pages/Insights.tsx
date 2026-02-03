@@ -135,18 +135,18 @@ export default function Insights() {
                 A curated selection of recent content reflecting how Alora Advisory interprets market signals, industry change, and strategic risk.
               </p>
 
-	              <form
-	                className="mt-10"
-		                onSubmit={(event) => {
-		                  event.preventDefault();
-		                  const query = heroSearchValue.trim();
-		                  const href = query ? `/insights/explore?q=${encodeURIComponent(query)}#results` : "/insights/explore";
-		                  router.push(href);
-		                }}
-		              >
-		                <div className="max-w-2xl relative group">
-		                  <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
-		                  <SearchCombobox
+		              <form
+		                className="mt-10"
+			                onSubmit={(event) => {
+			                  event.preventDefault();
+			                  const query = heroSearchValue.trim();
+			                  if (!query) return;
+			                  router.push(`/insights/explore?q=${encodeURIComponent(query)}#results`);
+			                }}
+			              >
+			                <div className="max-w-2xl relative group">
+			                  <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+			                  <SearchCombobox
 		                    scope="insights"
 		                    value={heroSearchValue}
 		                    onValueChange={setHeroSearchValue}
@@ -158,20 +158,21 @@ export default function Insights() {
 		                    inputWrapperClassName="relative bg-white dark:bg-slate-800 rounded-2xl shadow-elegant-sm px-4 py-3 flex items-center"
 		                    leading={<Search className="text-slate-400 ml-4 mr-3 h-5 w-5" aria-hidden="true" />}
 		                    inputClassName="w-full bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:border-0 focus-visible:border-0 text-slate-900 dark:text-white placeholder-slate-400 py-3"
-			                    onSubmit={(raw) => {
-			                      const query = raw.trim();
-			                      const href = query ? `/insights/explore?q=${encodeURIComponent(query)}#results` : "/insights/explore";
-			                      router.push(href);
-			                    }}
-		                    trailing={
-		                      <button
-		                        type="submit"
-		                        className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg mr-1"
-		                      >
-		                        Search
-		                      </button>
-		                    }
-		                  />
+				                    onSubmit={(raw) => {
+				                      const query = raw.trim();
+				                      if (!query) return;
+				                      router.push(`/insights/explore?q=${encodeURIComponent(query)}#results`);
+				                    }}
+				                    trailing={
+				                      <button
+				                        type="submit"
+				                        disabled={!heroSearchValue.trim()}
+				                        className="bg-primary hover:bg-primary/90 disabled:bg-primary/60 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg mr-1"
+				                      >
+				                        Search
+				                      </button>
+				                    }
+				                  />
 		                </div>
 	              </form>
             </div>

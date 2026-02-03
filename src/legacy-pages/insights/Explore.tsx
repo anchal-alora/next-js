@@ -176,8 +176,8 @@ export default function Explore() {
 		                const next = new URLSearchParams(searchParams);
 		                const q = searchText.trim();
 
-	                if (q) next.set("q", q);
-	                else next.delete("q");
+	                if (!q) return;
+	                next.set("q", q);
 
 	                next.delete("page");
 		                setSearchParams(next);
@@ -202,7 +202,8 @@ export default function Explore() {
 		                  trailing={
 		                    <button
 		                      type="submit"
-		                      className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg mr-1"
+		                      disabled={!searchText.trim()}
+		                      className="bg-primary hover:bg-primary/90 disabled:bg-primary/60 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg mr-1"
 		                    >
 		                      Search
 		                    </button>

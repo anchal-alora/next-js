@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { prisma } from "@/lib/prisma";
-import { getSignedDownloadUrl } from "@/lib/r2";
+import { getSignedReportDownloadUrl } from "@/lib/r2";
 import { downloadRatelimit, getClientIp, checkRateLimit } from "@/lib/ratelimit";
 
 async function tryLocalPublicFallback(objectKey: string, requestUrl: string): Promise<string | null> {
@@ -69,7 +69,7 @@ export async function GET(request: Request) {
 
   let signedUrl: string;
   try {
-    signedUrl = await getSignedDownloadUrl(record.objectKey, 60 * 15);
+    signedUrl = await getSignedReportDownloadUrl(record.objectKey, 60 * 15);
   } catch (error) {
     const fallbackUrl = await tryLocalPublicFallback(record.objectKey, request.url);
     if (!fallbackUrl) {

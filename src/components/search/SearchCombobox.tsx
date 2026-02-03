@@ -230,7 +230,9 @@ export function SearchCombobox({
   const showFallbackSuggestions = mode === "prefix" && results.length === 0;
 
   const handleSubmit = () => {
-    onSubmit?.(value);
+    const trimmed = value.trim();
+    if (!trimmed) return;
+    onSubmit?.(trimmed);
   };
 
   const handleSelect = (result: SearchResult) => {

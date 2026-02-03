@@ -172,8 +172,9 @@ export default async function Page({
                     </a>
                     <a
                       className="w-full py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
-                      href="/assets/logo/alora-logo-full.webp"
-                      download="alora-logo-full.webp"
+                      href="/api/media-kit"
+                      target="_blank"
+                      rel="noreferrer"
                     >
                       <DownloadCloud className="h-4 w-4" aria-hidden="true" /> Download Media Kit
                     </a>
@@ -284,7 +285,9 @@ export default async function Page({
                                 <div
                                   className={[
                                     "absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 border-background bg-slate-300 dark:bg-slate-700 transition-transform group-hover:scale-125",
-                                    isPrimaryMarker ? "bg-primary ring-4 ring-primary/10" : "group-hover:bg-primary",
+                                    isPrimaryMarker
+                                      ? "bg-primary ring-4 ring-primary/10"
+                                      : "group-hover:bg-primary group-hover:ring-4 group-hover:ring-primary/10",
                                   ].join(" ")}
                                 />
                                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">

@@ -30,7 +30,7 @@ const CareersPayloadSchema = z.object({
   email: z.string().email().max(254),
   phone: z.string().max(20),
   areaOfInterest: z.string().min(1).max(100),
-  background: z.string().min(20).max(750),
+  background: z.string().min(20).max(500),
   ...TRACKING_SCHEMA,
 });
 

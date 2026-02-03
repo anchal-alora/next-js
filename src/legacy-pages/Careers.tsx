@@ -49,11 +49,11 @@ export default function Careers() {
   });
   const CAREERS_FULL_NAME_MAX = 100;
 const CAREERS_EMAIL_MAX = 254;
-const CAREERS_PHONE_MAX = 20;
-const CAREERS_INTEREST_MAX = 100;
-const CAREERS_MESSAGE_MIN = 20;
-const CAREERS_MESSAGE_MAX = 750;
-const CAREERS_MESSAGE_COUNT_THRESHOLD = Math.ceil(CAREERS_MESSAGE_MAX * 0.85);
+	const CAREERS_PHONE_MAX = 20;
+	const CAREERS_INTEREST_MAX = 100;
+	const CAREERS_MESSAGE_MIN = 20;
+	const CAREERS_MESSAGE_MAX = 500;
+	const CAREERS_MESSAGE_COUNT_THRESHOLD = Math.ceil(CAREERS_MESSAGE_MAX * 0.85);
 
   const [errors, setErrors] = useState<Record<string, string | null>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
