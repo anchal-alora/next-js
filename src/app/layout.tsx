@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     default: "Alora Advisory | Market Research and Strategic Advisory",
     template: "%s | Alora Advisory",
   },
+  authors: [{ name: "Alora Advisory" }],
   description:
     "Alora Advisory is a premier management consulting firm helping Fortune 500 companies navigate complexity and achieve transformational results through strategy, operations, and digital transformation.",
   alternates: {
@@ -31,9 +32,18 @@ export const metadata: Metadata = {
     title: "Alora Advisory | Market Research and Strategic Advisory",
     description:
       "Partnering with leading organizations to solve their most complex challenges and capture their greatest opportunities.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Alora Advisory",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og-image.jpg"],
   },
 };
 

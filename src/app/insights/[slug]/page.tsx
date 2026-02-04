@@ -22,6 +22,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
   const canonical = toCanonical(`/insights/${report.slug}`);
   const imageUrl = report.image ? toCanonical(report.image) : undefined;
+  const fallbackOgImageUrl = toCanonical("/og-image.jpg");
+  const images = imageUrl ? [{ url: imageUrl }] : [{ url: fallbackOgImageUrl }];
 
   return {
     title: report.title,
@@ -34,13 +36,13 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       description: report.description,
       url: canonical,
       type: "article",
-      images: imageUrl ? [{ url: imageUrl }] : undefined,
+      images,
     },
     twitter: {
       card: "summary_large_image",
       title: report.title,
       description: report.description,
-      images: imageUrl ? [imageUrl] : undefined,
+      images: [images[0]!.url],
     },
   };
 }

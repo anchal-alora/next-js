@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!article) return {};
 
   const canonical = toCanonical(`/newsroom/${article.slug}`);
+  const fallbackOgImageUrl = toCanonical("/og-image.jpg");
 
   return {
     title: `${article.title} | Alora Advisory`,
@@ -35,11 +36,13 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       description: article.subheader,
       url: canonical,
       type: "article",
+      images: [{ url: fallbackOgImageUrl }],
     },
     twitter: {
       card: "summary_large_image",
       title: `${article.title} | Alora Advisory`,
       description: article.subheader,
+      images: [fallbackOgImageUrl],
     },
   };
 }
