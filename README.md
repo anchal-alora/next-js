@@ -78,3 +78,38 @@ Start here: `CONTENT_GUIDE.md`.
 - Deploy to Vercel.
 - Set the same environment variables from `.env.example` in your Vercel project.
 - Run Prisma migrations as part of your deployment flow (or via CI) before traffic cutover.
+
+## Web Hygiene Hardening
+This repo includes a minimal “web hygiene” hardening pass focused on predictable server-rendered HTML, crawler accessibility, and reduced false-positives for automated scanners.
+
+### What’s implemented (and why)
+- **SSR/SSG HTML visibility**: Critical public pages are Server Components by default (no `"use client"` at the page level), so “View Source” contains real headings/paragraphs instead of empty shells.
+- **Robots + sitemap**: `src/app/robots.ts` and `src/app/sitemap.ts` serve `robots.txt` and `sitemap.xml` without auth/challenges. The sitemap includes canonical public routes plus Insights/Newsroom/Team slugs.
+- **Canonical URL base**: `src/app/layout.tsx` sets `metadataBase` from `NEXT_PUBLIC_SITE_URL` so canonicals/sitemap always point to the correct production domain.
+- **Redirect hygiene**: Only required redirect is kept (`/who-we-are` → `/about`) in `next.config.ts`. Host redirects (`www` → apex, HTTP → HTTPS) are handled in Vercel domain settings to avoid redirect chains.
+- **Security headers (safe baseline)**: `next.config.ts` sets conservative headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`) without adding CSP that could break GTM/analytics.
+
+### Third-party domains (expected)
+- `www.googletagmanager.com` — GTM loader (only if `NEXT_PUBLIC_GTM_CONTAINER_ID` is set).
+- Vercel Analytics/Speed Insights endpoints — loaded via `@vercel/analytics` and `@vercel/speed-insights`.
+
+### Verification checklist (run after deploy)
+HTML content present (should include visible headings/paragraphs in output):
+```bash
+curl -sL https://aloraadvisory.com/ | head -n 80
+curl -sL https://aloraadvisory.com/about | head -n 80
+curl -sL https://aloraadvisory.com/services | head -n 80
+curl -sL https://aloraadvisory.com/contact | head -n 80
+```
+
+Robots + sitemap accessible:
+```bash
+curl -I https://aloraadvisory.com/robots.txt
+curl -I https://aloraadvisory.com/sitemap.xml
+curl -s https://aloraadvisory.com/robots.txt
+```
+
+Headers present:
+```bash
+curl -I https://aloraadvisory.com/
+```

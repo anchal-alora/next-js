@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
+import { PUBLIC_ROUTES } from "@/lib/publicRoutes";
 import { getReportSlugs } from "@/lib/server/reports";
 import { getNewsroomSlugs } from "@/lib/server/newsroom";
 import { getTeamSlugs } from "@/lib/server/team";
@@ -8,31 +9,46 @@ type ChangeFrequency = "always" | "hourly" | "daily" | "weekly" | "monthly" | "y
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const staticRoutes: Array<{ route: string; changeFrequency: ChangeFrequency; priority: number }> = [
-    { route: "/", changeFrequency: "weekly", priority: 1 },
-    { route: "/insights", changeFrequency: "weekly", priority: 0.9 },
-    { route: "/insights/explore", changeFrequency: "weekly", priority: 0.8 },
-    { route: "/services", changeFrequency: "monthly", priority: 0.8 },
-    { route: "/industries", changeFrequency: "monthly", priority: 0.8 },
-    { route: "/about", changeFrequency: "monthly", priority: 0.7 },
-    { route: "/careers", changeFrequency: "monthly", priority: 0.6 },
-    { route: "/contact", changeFrequency: "monthly", priority: 0.7 },
-    { route: "/privacy", changeFrequency: "yearly", priority: 0.3 },
-    { route: "/terms", changeFrequency: "yearly", priority: 0.3 },
-    { route: "/cookies", changeFrequency: "yearly", priority: 0.3 },
-    { route: "/newsroom", changeFrequency: "weekly", priority: 0.8 },
-  ];
+  const changeFrequencyByRoute: Partial<Record<(typeof PUBLIC_ROUTES)[number], ChangeFrequency>> = {
+    "/": "weekly",
+    "/insights": "weekly",
+    "/insights/explore": "weekly",
+    "/newsroom": "weekly",
+    "/services": "monthly",
+    "/industries": "monthly",
+    "/about": "monthly",
+    "/contact": "monthly",
+    "/careers": "monthly",
+    "/privacy": "yearly",
+    "/terms": "yearly",
+    "/cookies": "yearly",
+  };
+
+  const priorityByRoute: Partial<Record<(typeof PUBLIC_ROUTES)[number], number>> = {
+    "/": 1,
+    "/insights": 0.9,
+    "/insights/explore": 0.8,
+    "/newsroom": 0.8,
+    "/services": 0.8,
+    "/industries": 0.8,
+    "/about": 0.7,
+    "/contact": 0.7,
+    "/careers": 0.6,
+    "/privacy": 0.3,
+    "/terms": 0.3,
+    "/cookies": 0.3,
+  };
 
   const reportSlugs = await getReportSlugs();
   const newsroomSlugs = await getNewsroomSlugs();
   const teamSlugs = await getTeamSlugs();
 
   return [
-    ...staticRoutes.map(({ route, changeFrequency, priority }) => ({
+    ...PUBLIC_ROUTES.map((route) => ({
       url: `${SITE_URL}${route}`,
       lastModified: now,
-      changeFrequency,
-      priority,
+      changeFrequency: changeFrequencyByRoute[route] ?? ("monthly" as ChangeFrequency),
+      priority: priorityByRoute[route] ?? 0.5,
     })),
     ...reportSlugs.map((slug) => ({
       url: `${SITE_URL}/insights/${slug}`,
